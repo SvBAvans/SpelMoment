@@ -1,0 +1,59 @@
+/*html {*/
+/*  font-size: 14px;*/
+/*}*/
+
+/*@media (min-width: 768px) {*/
+/*  html {*/
+/*    font-size: 16px;*/
+/*  }*/
+/*}*/
+
+/*.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {*/
+/*  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;*/
+/*}*/
+
+/*html {*/
+/*  position: relative;*/
+/*  min-height: 100%;*/
+/*}*/
+
+/*body {*/
+/*  margin-bottom: 60px;*/
+/*}*/
+
+/*#wrapper {*/
+/*  position: relative;*/
+/*  min-height: 100vh;*/
+/*}*/
+
+/*#content {*/
+/*  padding-bottom: 2.5rem;  */
+/*}*/
+
+/*#footer {*/
+/*  position: absolute;*/
+/*  bottom: 0;*/
+/*  width: 100%;*/
+/*  height: 2.5rem;*/
+/*}*/
+
+:root {
+    --bs-primary: #1e6a41;
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: #1e6a41;
+    border-color: #1e6a41;
+}
+
+#hero-image {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url('https://verwijzerproduction.blob.core.windows.net/denhaag/0002876-1024x682.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 65vh
+}
