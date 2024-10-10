@@ -38,11 +38,11 @@ jobs:
       - name: Publish
         run: dotnet publish ./SpelMoment --output ./dist/ui --configuration Release  
         
-      - name: Bundle EF Project
-        run: |
-          dotnet tool install --global dotnet-ef
-          dotnet tool restore
-          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment --self-contained -r linux-x64
+#      - name: Bundle EF Project
+#        run: |
+#          dotnet tool install --global dotnet-ef
+#          dotnet tool restore
+#          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment --self-contained -r linux-x64
         
       - name: Upload artifact API
         uses: actions/upload-artifact@v4
@@ -50,8 +50,8 @@ jobs:
           name: spelmoment-spelmoment
           path: ./dist/ui
   
-      - name: Upload artifact Migrations
-        uses: actions/upload-artifact@v4
-        with:
-          name: spelmoment-migrations
-          path: ./dist/migrations   
+#      - name: Upload artifact Migrations
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: spelmoment-migrations
+#          path: ./dist/migrations   
