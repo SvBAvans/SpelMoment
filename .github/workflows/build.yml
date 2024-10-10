@@ -36,13 +36,13 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         
       - name: Publish
-        run: dotnet publish ./SpelMoment.SpelMoment --output ./dist/ui --configuration Release  
+        run: dotnet publish ./SpelMoment --output ./dist/ui --configuration Release  
         
       - name: Bundle EF Project
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment.SpelMoment --self-contained -r linux-x64
+          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment --self-contained -r linux-x64
         
       - name: Upload artifact API
         uses: actions/upload-artifact@v4
