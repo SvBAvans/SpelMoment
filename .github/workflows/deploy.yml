@@ -1,0 +1,50 @@
+﻿name: deploy.yml
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch: 
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+  
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download UI
+        uses: actions/download-artifact@v4
+        with:
+          name: spelmoment-ui
+          path: ./ui
+          
+      - name: Download migrations
+        uses: actions/download-artifact@v4
+        with:
+          name: spelmoment-migrations
+          path: ./migrations
+          
+      - name: Execute EF migrations
+        run: |
+          chmod +x ./migrations/migrations.exe
+          ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{secrets.AZURE_SQL_MIGRATOR}};Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD  }};Trusted_Connection=False;Encrypt=True;"
+    
+      - uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          
+      - name: Deploy Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: '${{ secrets.AZURE_APP_SERVICE_NAME }}'
+          package: './ui'
+          
+      - uses: azure/appservice-settings@v1
+        with:
+          app-name: '${{secrets.AZURE_APP_SERVICE_NAME}}'
+          app-settings-json: '[{ "name": "ConnectionStringAzureSQL", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
+          

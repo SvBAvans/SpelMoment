@@ -1,7 +1,21 @@
+using Microsoft.EntityFrameworkCore;
+using SpelMoment.Infrastructure.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var dbConnectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
+
+builder.Services.AddDbContext<SpelMomentDbContext>(options =>
+{
+    options
+        .UseSqlServer(dbConnectionString, sqlOptions =>
+        {
+            sqlOptions.MigrationsHistoryTable("EFMigrationHistory", SpelMomentDbContext.SqlSchema);
+        });
+});
 
 var app = builder.Build();
 

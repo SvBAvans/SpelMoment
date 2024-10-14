@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment", "SpelMoment\SpelMoment.csproj", "{1ED82026-4DE9-4C9C-AC24-D69BD8AEF242}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment.Infrastructure", "SpelMoment.Infrastructure\SpelMoment.Infrastructure.csproj", "{C31C69E8-75A0-4B67-9CC4-753606902695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment.Domain", "SpelMoment.Domain\SpelMoment.Domain.csproj", "{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{1ED82026-4DE9-4C9C-AC24-D69BD8AEF242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED82026-4DE9-4C9C-AC24-D69BD8AEF242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED82026-4DE9-4C9C-AC24-D69BD8AEF242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C31C69E8-75A0-4B67-9CC4-753606902695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31C69E8-75A0-4B67-9CC4-753606902695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31C69E8-75A0-4B67-9CC4-753606902695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31C69E8-75A0-4B67-9CC4-753606902695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
