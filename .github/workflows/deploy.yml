@@ -46,5 +46,5 @@ jobs:
       - uses: azure/appservice-settings@v1
         with:
           app-name: '${{secrets.AZURE_APP_SERVICE_NAME}}'
-          app-settings-json: '[{ "name": "ConnectionStringAzureSQL", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
+          app-settings-json: '[{ "name": "DB_CONNECTION_STRING", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
           

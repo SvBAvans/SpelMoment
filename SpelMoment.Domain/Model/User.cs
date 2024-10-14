@@ -7,7 +7,7 @@ public class User
     public string Email { get; set; }
     public DateOnly Birthday { get; set; }
     public GenderEnum Gender { get; set; }
-    public Address Address { get; set; }
+    // public Address Address { get; set; }
     public bool HasLactoseIntolerance { get; set; }
     public bool HasNutAllergy { get; set; }
     public bool IsVegetarian { get; set; }
