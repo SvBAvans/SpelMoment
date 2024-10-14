@@ -19,7 +19,7 @@ jobs:
       - name: Download UI
         uses: actions/download-artifact@v4
         with:
-          name: spelmoment-ui
+          name: spelmoment
           path: ./ui
           
       - name: Download migrations
