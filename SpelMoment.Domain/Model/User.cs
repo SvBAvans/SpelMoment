@@ -8,6 +8,10 @@ public class User
     public DateOnly Birthday { get; set; }
     public GenderEnum Gender { get; set; }
     public Address Address { get; set; }
+    public bool HasLactoseIntolerance { get; set; }
+    public bool HasNutAllergy { get; set; }
+    public bool IsVegetarian { get; set; }
+    public bool DrinksAlcohol { get; set; }
 
     public enum GenderEnum
     {
