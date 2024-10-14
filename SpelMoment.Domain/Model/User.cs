@@ -6,7 +6,13 @@ public class User
     public string Name { get; set; }
     public string Email { get; set; }
     public DateOnly Birthday { get; set; }
-    public string Street { get; set; }
-    public string City { get; set; }
-    public string HouseNumber { get; set; }
+    public GenderEnum Gender { get; set; }
+    public Address Address { get; set; }
+
+    public enum GenderEnum
+    {
+        Male,
+        Female,
+        Other
+    }
 }
