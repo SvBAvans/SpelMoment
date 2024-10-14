@@ -8,4 +8,5 @@ public class Moment
     public Address Address { get; set; }
     public int maxPlayers { get; set; }
     public IEnumerable<User> Players { get; set; } 
+    public IEnumerable<Game> Games { get; set; }
 }
