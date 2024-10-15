@@ -14,6 +14,7 @@ public class SpelMomentDbContext : DbContext
     public DbSet<Moment> Moments => Set<Moment>();
     public DbSet<Game> Games => Set<Game>();
     public DbSet<Address> Addresses => Set<Address>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.HasDefaultSchema(SqlSchema);
 }

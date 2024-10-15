@@ -2,7 +2,7 @@
 using SpelMoment.Domain.Model;
 using SpelMoment.Infrastructure.Data;
 
-namespace SpelMoment.Infrastructure.Repository;
+namespace SpelMoment.Infrastructure.Repositories;
 
 public class MomentRepository : IMomentRepository
 {

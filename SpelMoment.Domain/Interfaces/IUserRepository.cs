@@ -1,6 +1,12 @@
-﻿namespace SpelMoment.Domain.Interfaces;
+﻿using SpelMoment.Domain.Model;
 
-public class IUserRepository
+namespace SpelMoment.Domain.Interfaces;
+
+public interface IUserRepository
 {
-    
+    public IEnumerable<User> GetAll();
+    public User? GetById(int id);
+    public void Add(User user);
+    public void Update(User user);
+    public void Delete(int id);
 }
