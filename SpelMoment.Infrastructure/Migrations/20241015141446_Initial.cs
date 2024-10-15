@@ -29,7 +29,6 @@ namespace SpelMoment.Infrastructure.Migrations
                     HasNutAllergy = table.Column<bool>(type: "bit", nullable: false),
                     IsVegetarian = table.Column<bool>(type: "bit", nullable: false),
                     DrinksAlcohol = table.Column<bool>(type: "bit", nullable: false),
-                    Address_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -49,7 +48,6 @@ namespace SpelMoment.Infrastructure.Migrations
                     OrganiserId = table.Column<int>(type: "int", nullable: true),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address_HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),

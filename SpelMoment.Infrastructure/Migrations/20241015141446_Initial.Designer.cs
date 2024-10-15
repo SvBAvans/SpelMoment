@@ -12,7 +12,7 @@ using SpelMoment.Infrastructure.Data;
 namespace SpelMoment.Infrastructure.Migrations
 {
     [DbContext(typeof(SpelMomentDbContext))]
-    [Migration("20241015140753_Initial")]
+    [Migration("20241015141446_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -196,9 +196,6 @@ namespace SpelMoment.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier");
-
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
@@ -231,9 +228,6 @@ namespace SpelMoment.Infrastructure.Migrations
                             b1.Property<string>("HouseNumber")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
-
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Street")
                                 .IsRequired()

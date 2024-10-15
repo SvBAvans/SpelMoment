@@ -193,9 +193,6 @@ namespace SpelMoment.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier");
-
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
@@ -228,9 +225,6 @@ namespace SpelMoment.Infrastructure.Migrations
                             b1.Property<string>("HouseNumber")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
-
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
