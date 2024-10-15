@@ -13,8 +13,19 @@ public class SpelMomentDbContext : DbContext
 
     public DbSet<Moment> Moments => Set<Moment>();
     public DbSet<Game> Games => Set<Game>();
-    public DbSet<Address> Addresses => Set<Address>();
     public DbSet<User> Users => Set<User>();
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.HasDefaultSchema(SqlSchema);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema(SqlSchema);
+
+        modelBuilder.Entity<Moment>()
+            .HasOne(e => e.Organiser)
+            .WithMany(e => e.OrganizedMoments)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Moment>()
+            .HasMany(e => e.Players)
+            .WithMany(e => e.RegisteredMoments);
+    }
 }

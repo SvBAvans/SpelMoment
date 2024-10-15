@@ -12,7 +12,7 @@ using SpelMoment.Infrastructure.Data;
 namespace SpelMoment.Infrastructure.Migrations
 {
     [DbContext(typeof(SpelMomentDbContext))]
-    [Migration("20241014140907_Initial")]
+    [Migration("20241015140753_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,27 +26,19 @@ namespace SpelMoment.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SpelMoment.Domain.Model.Address", b =>
+            modelBuilder.Entity("MomentUser", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PlayersId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RegisteredMomentsId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("PlayersId", "RegisteredMomentsId");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("RegisteredMomentsId");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses", "SpelMoment");
+                    b.ToTable("MomentUser", "SpelMoment");
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Game", b =>
@@ -94,9 +86,6 @@ namespace SpelMoment.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -112,17 +101,16 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<bool>("IsVegetarianFriendly")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OganiserId")
+                    b.Property<int?>("OrganiserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("maxPlayers")
-                        .HasColumnType("int");
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("OganiserId");
+                    b.HasIndex("OrganiserId");
 
                     b.ToTable("Moments", "SpelMoment");
                 });
@@ -157,18 +145,28 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<bool>("IsVegetarian")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MomentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MomentId");
+                    b.ToTable("Users", "SpelMoment");
+                });
 
-                    b.ToTable("User", "SpelMoment");
+            modelBuilder.Entity("MomentUser", b =>
+                {
+                    b.HasOne("SpelMoment.Domain.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("PlayersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpelMoment.Domain.Model.Moment", null)
+                        .WithMany()
+                        .HasForeignKey("RegisteredMomentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Game", b =>
@@ -180,35 +178,87 @@ namespace SpelMoment.Infrastructure.Migrations
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Moment", b =>
                 {
-                    b.HasOne("SpelMoment.Domain.Model.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("SpelMoment.Domain.Model.User", "Organiser")
+                        .WithMany("OrganizedMoments")
+                        .HasForeignKey("OrganiserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.OwnsOne("SpelMoment.Domain.Model.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("MomentId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("HouseNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("MomentId");
+
+                            b1.ToTable("Moments", "SpelMoment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MomentId");
+                        });
+
+                    b.Navigation("Address")
                         .IsRequired();
 
-                    b.HasOne("SpelMoment.Domain.Model.User", "Oganiser")
-                        .WithMany()
-                        .HasForeignKey("OganiserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Oganiser");
+                    b.Navigation("Organiser");
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>
                 {
-                    b.HasOne("SpelMoment.Domain.Model.Moment", null)
-                        .WithMany("Players")
-                        .HasForeignKey("MomentId");
+                    b.OwnsOne("SpelMoment.Domain.Model.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("UserId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("HouseNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users", "SpelMoment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Moment", b =>
                 {
                     b.Navigation("Games");
+                });
 
-                    b.Navigation("Players");
+            modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>
+                {
+                    b.Navigation("OrganizedMoments");
                 });
 #pragma warning restore 612, 618
         }

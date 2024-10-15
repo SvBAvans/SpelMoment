@@ -1,5 +1,8 @@
-﻿namespace SpelMoment.Domain.Model;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace SpelMoment.Domain.Model;
+
+[Owned]
 public class Address
 {
     public Guid Id { get; set; }
