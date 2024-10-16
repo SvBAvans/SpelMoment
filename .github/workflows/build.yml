@@ -45,7 +45,8 @@ jobs:
         run: |
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment --project ./SpelMoment.Infrastructure --self-contained -r linux-x64
+          dotnet ef migrations bundle --output ./dist/migrations/migrations.exe --startup-project ./SpelMoment --project ./SpelMoment.Infrastructure --context SpelMomentDbContext --self-contained -r linux-x64
+          dotnet ef migrations bundle --output ./dist/migrations/migrations-auth.exe --startup-project ./SpelMoment --project ./SpelMoment.Infrastructure --context AuthDbContext --self-contained -r linux-x64
         
       - name: Upload artifact API
         uses: actions/upload-artifact@v4
