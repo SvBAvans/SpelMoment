@@ -1,0 +1,50 @@
+﻿@using SpelMoment.Domain.Model
+@model RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <form asp-action="Register" method="POST">
+        <label asp-for="Name">Naam</label>
+        <input asp-for="Name"/>
+
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email"/>
+
+        <label asp-for="Password">Wachtwoord</label>
+        <input asp-for="Password"/>
+
+        <label asp-for="PasswordConfirmation">Herhaal wachtwoord</label>
+        <input asp-for="PasswordConfirmation"/>
+        
+        <label asp-for="Birthday">Geboorte datum</label>
+        <input asp-for="Birthday" type="date"/>
+
+        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<User.GenderEnum>()"></select>
+        
+        <label asp-for="HasLactoseIntolerance">Lactose Intolerance</label>
+        <input asp-for="HasLactoseIntolerance" type="checkbox"/>
+
+        <label asp-for="HasNutAllergy">Nut Allergy</label>
+        <input asp-for="HasNutAllergy" type="checkbox"/>
+
+        <label asp-for="IsVegetarian">Vegetarian</label>
+        <input asp-for="IsVegetarian" type="checkbox"/>
+
+        <label asp-for="DrinksAlcohol">Drinks alcohol</label>
+        <input asp-for="DrinksAlcohol" type="checkbox"/>
+        
+        <button type="submit">Register</button>
+        <div asp-validation-summary="All"></div>
+    </form>
+</div>
+</body>
+</html>

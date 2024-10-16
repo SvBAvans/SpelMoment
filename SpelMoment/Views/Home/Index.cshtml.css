@@ -1,0 +1,15 @@
+#hero-image {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url('https://verwijzerproduction.blob.core.windows.net/denhaag/0002876-1024x682.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 65vh
+}
+
+/*.moment-card {*/
+/*    width: 25rem;*/
+/*    height: 25rem;*/
+/*}*/
+
+.property-value {
+    max-width: 75%;
+}

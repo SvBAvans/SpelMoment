@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SpelMoment.Domain.Interfaces;
 using SpelMoment.Infrastructure.Data;
 using SpelMoment.Infrastructure.Repositories;
+using SpelMoment.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
+builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -51,6 +53,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seedData = scope.ServiceProvider.GetRequiredService<AuthSeedData>();
+
+    await seedData.seedDatabase();
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
