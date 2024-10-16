@@ -6,9 +6,6 @@ using SpelMoment.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
 var dbConnectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
 
 builder.Services.AddDbContext<SpelMomentDbContext>(options =>
@@ -50,6 +47,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,7 +62,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
@@ -70,7 +69,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{culture=nl}/{controller=Home}/{action=Index}/{id?}",
-    constraints: new {culture = "nl|en"});
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

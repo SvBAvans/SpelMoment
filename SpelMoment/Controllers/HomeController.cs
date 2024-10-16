@@ -4,7 +4,7 @@ using SpelMoment.Models;
 
 namespace SpelMoment.Controllers;
 
-public class HomeController : BaseController
+public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
@@ -15,7 +15,6 @@ public class HomeController : BaseController
 
     public IActionResult Index()
     {
-        _logger.LogInformation(Thread.CurrentThread.CurrentUICulture.EnglishName);
         return View();
     }
 
