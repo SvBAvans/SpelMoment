@@ -180,7 +180,7 @@ namespace SpelMoment.Infrastructure.Migrations
                         .HasForeignKey("OrganiserId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.OwnsOne("SpelMoment.Domain.Model.Address", "Address", b1 =>
+                    b.OwnsOne("SpelMoment.Domain.Model.Moment.Address#SpelMoment.Domain.Model.Address", "Address", b1 =>
                         {
                             b1.Property<int>("MomentId")
                                 .HasColumnType("int");
@@ -213,7 +213,7 @@ namespace SpelMoment.Infrastructure.Migrations
 
             modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>
                 {
-                    b.OwnsOne("SpelMoment.Domain.Model.Address", "Address", b1 =>
+                    b.OwnsOne("SpelMoment.Domain.Model.User.Address#SpelMoment.Domain.Model.Address", "Address", b1 =>
                         {
                             b1.Property<int>("UserId")
                                 .HasColumnType("int");

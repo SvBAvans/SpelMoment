@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SpelMoment.Domain.Interfaces;
 using SpelMoment.Infrastructure.Data;
+using SpelMoment.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,36 @@ builder.Services.AddDbContext<SpelMomentDbContext>(options =>
         });
 });
 
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options
+        .UseSqlServer(dbConnectionString, sqlOptions =>
+        {
+            sqlOptions.MigrationsHistoryTable("EFMigrationHistory", AuthDbContext.SqlSchema);
+        });
+});
+
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+    //TODO: Change later
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 3;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IMomentRepository, MomentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +65,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
