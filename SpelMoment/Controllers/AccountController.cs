@@ -29,9 +29,9 @@ public class AccountController : Controller
 
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Register()
+    public IActionResult Register(string returnUrl = "")
     {
-        var model = new RegisterViewModel() { Role = UserRole.User };
+        var model = new RegisterViewModel() { Role = UserRole.User, ReturnUrl = returnUrl};
         return View(model);
     }
 
@@ -70,9 +70,10 @@ public class AccountController : Controller
 
             User appUser = new()
             {
-                Name = model.Name,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Email = model.Email,
-                Address = new Address() {Street = "Lovensdijkstraat", City = "Breda", HouseNumber = "61"},
+                Address = new Address {Street = model.Address.Street, HouseNumber = model.Address.HouseNumber, City = model.Address.City},
                 Role = model.Role,
                 IdentityId = user.Id,
                 Birthday = model.Birthday,
@@ -97,24 +98,24 @@ public class AccountController : Controller
 
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login(string returnUrl = "")
+    public IActionResult Login(string returnUrl = null)
     {
-        return View(new LoginResponse {ReturnUrl = returnUrl});
+        return View(new LoginViewModel {ReturnUrl = returnUrl});
     }
 
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> LoginAsync(LoginResponse loginResponse)
+    public async Task<IActionResult> LoginAsync(LoginViewModel loginViewModel)
     {
         if (ModelState.IsValid) {
-            var user = await userManager.FindByEmailAsync(loginResponse.Email);
+            var user = await userManager.FindByEmailAsync(loginViewModel.Email);
             if (user != null)
             {
                 await signInManager.SignOutAsync();
-                if ((await signInManager.PasswordSignInAsync(user, loginResponse.Password, true, false)).Succeeded)
+                if ((await signInManager.PasswordSignInAsync(user, loginViewModel.Password, true, false)).Succeeded)
                 {
-                    return Redirect(loginResponse.ReturnUrl ?? "/");
+                    return Redirect(loginViewModel.ReturnUrl ?? "/");
                 }
             }
         }

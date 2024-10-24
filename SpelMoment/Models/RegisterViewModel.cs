@@ -7,7 +7,9 @@ namespace SpelMoment.Models;
 public class RegisterViewModel
 {
     [Required]
-    public string Name { get; set; }
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
     [Required]
     [EmailAddress]
     public string Email { get; set; }
@@ -18,12 +20,21 @@ public class RegisterViewModel
     [PasswordPropertyText]
     public string PasswordConfirmation { get; set; }
     
+    [Required]
     public DateOnly Birthday { get; set; }
+    [Required]
     public User.GenderEnum Gender { get; set; }
+    [Required]
     public bool HasLactoseIntolerance { get; set; }
+    [Required]
     public bool HasNutAllergy { get; set; }
+    [Required]
     public bool IsVegetarian { get; set; }
+    [Required]
     public bool DrinksAlcohol { get; set; }
+    
+    [Required]
+    public Address Address { get; set; }
     
     public string? ReturnUrl { get; set; }
     

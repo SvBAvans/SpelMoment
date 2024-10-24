@@ -43,7 +43,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+});
 
 builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();

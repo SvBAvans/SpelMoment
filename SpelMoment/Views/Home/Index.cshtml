@@ -2,10 +2,6 @@
     ViewData["Title"] = "Home";
 }
 
-<head>
-    <link rel="stylesheet" href="~/css/index.css" />
-</head>
-
 <div class="container-fluid p-0" id="hero">
     <div class="position-relative">
         <div id="hero-image"></div>
@@ -13,7 +9,10 @@
         <div class="position-absolute top-50 start-0 translate-middle-y text-white p-4">
             <h1 class="display-4">Speel, Leer en Maak Vrienden</h1>
             <p class="lead">Ontdek Nederlands via Bordspel Avonden!</p>
-            <a class="lead btn btn-primary" role="button">Meld je aan!</a>
+            @if (User.Identity == null || !User.Identity.IsAuthenticated) 
+            {
+                <a asp-action="Register" asp-controller="Account" class="lead btn btn-primary" role="button">Meld je aan!</a>
+            }
         </div>
     </div>
     

@@ -1,42 +1,45 @@
-@model LoginResponse
-
+@model LoginViewModel
 @{
     Layout = null;  
 }
 
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Login Page</title>
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
+    <link href="~/css/login.css" rel="stylesheet" asp-append-version="true"/>
 </head>
 <body>
-<div class="container d-flex align-items-center justify-content-center">
-    <div class="card mx-auto w-100" style="max-width: 330px;">
-        <div class="card-text">
-            <form asp-action="Login" method="post" class="m-2">
-                <div class="form-group">
-                    <label asp-for="Email" class="form-label">Email address</label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email"></span>
+<div class="container login-container">
+    <div class="card login-card shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">Login</h3>
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input type="text" class="form-control" asp-for="Email" placeholder="Enter Email" required>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label asp-for="Password" class="form-label">Password</label>
-                    <input asp-for="Password" class="form-control" type="password"/>
-                    <span asp-validation-for="Password"></span>
+                    <input type="password" class="form-control" asp-for="Password" placeholder="Enter password" required>
                 </div>
-                
-                <div asp-validation-summary="All"></div>
-                <button class="btn btn-primary px-auto" type="submit">Login</button>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="ReturnUrl" />
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <hr/>
+                <a asp-action="Register" asp-controller="Account">Nog geen Account?</a>
             </form>
         </div>
     </div>
 </div>
+
+<script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+@* <script type="text/javascript"> *@
+@*    TODO: Form Validation  *@
+@* </script> *@
 </body>
 </html>

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SpelMoment.Models;
 
-public class LoginResponse
+public class LoginViewModel
 {
     [Required]
     [EmailAddress]

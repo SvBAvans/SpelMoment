@@ -130,6 +130,10 @@ namespace SpelMoment.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
@@ -145,7 +149,7 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<bool>("IsVegetarian")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
