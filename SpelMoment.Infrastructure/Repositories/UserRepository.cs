@@ -23,6 +23,11 @@ public class UserRepository : IUserRepository
         return dbContext.Users.Find(id);
     }
 
+    public User? GetByIdentityId(string identityId)
+    {
+        return dbContext.Users.FirstOrDefault(user => user.IdentityId == identityId);
+    }
+
     public void Add(User user)
     {
         dbContext.Users.Add(user);
@@ -32,6 +37,7 @@ public class UserRepository : IUserRepository
     public void Update(User user)
     {
         dbContext.Users.Update(user);
+        dbContext.SaveChanges();
     }
 
     public void Delete(int id)

@@ -1,0 +1,16 @@
+
+#hero-image {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url(/img/hero-banner.jpeg);
+    background-size: cover;
+    background-position: center;
+    height: 65vh
+}
+
+/*.moment-card {*/
+/*    width: 25rem;*/
+/*    height: 25rem;*/
+/*}*/
+
+.property-value {
+    max-width: 75%;
+}

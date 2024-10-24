@@ -1,0 +1,173 @@
+﻿@model RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registratie Pagina</title>
+  <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
+  <link href="~/css/register.css" rel="stylesheet" asp-append-version="true" />
+</head>
+<body>
+<div class="container register-container">
+  <div class="card register-card shadow-sm my-3">
+    <div class="card-body">
+      <h3 class="card-title text-center mb-4">Registreren</h3>
+      <form asp-action="Register" method="post" class="needs-validation" novalidate>
+        
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <label asp-for="FirstName" class="form-label">Voornaam</label>
+              <input type="text" class="form-control" asp-for="FirstName" placeholder="Voer uw naam in" required>
+            </div>
+            <div class="col-md-6">
+              <label asp-for="LastName" class="form-label">Achternaam</label>
+              <input type="text" class="form-control" asp-for="LastName" placeholder="Voer uw naam in" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="Email" class="form-label">E-mail</label>
+          <input type="email" class="form-control" asp-for="Email" placeholder="Voer uw e-mail in" required>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="Password" class="form-label">Wachtwoord</label>
+          <input type="password" class="form-control" asp-for="Password" placeholder="Voer uw wachtwoord in" required>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="PasswordConfirmation" class="form-label">Bevestig Wachtwoord</label>
+          <input type="password" class="form-control" asp-for="PasswordConfirmation" placeholder="Bevestig uw wachtwoord" required>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="Birthday" class="form-label">Geboortedatum</label>
+          <input type="date" class="form-control" asp-for="Birthday" value="" required>
+        </div>
+
+        <div class="mb-3">
+          <label asp-for="Gender" class="form-label">Geslacht</label>
+          <select class="form-select" asp-for="Gender" required>
+            <option value="@SpelMoment.Domain.Model.User.GenderEnum.Male">Man</option>
+            <option value="@SpelMoment.Domain.Model.User.GenderEnum.Female">Vrouw</option>
+            <option value="@SpelMoment.Domain.Model.User.GenderEnum.Other">Anders</option>
+          </select>
+        </div>
+        
+        <div class="mt-4">
+          <h3 class="h5">Dieetwensen</h3>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="HasLactoseIntolerance">
+            <label class="form-check-label" asp-for="HasLactoseIntolerance">Lactose-intolerant</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="HasNutAllergy">
+            <label class="form-check-label" asp-for="HasNutAllergy">Notenallergie</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="IsVegetarian">
+            <label class="form-check-label" asp-for="IsVegetarian">Vegetarisch</label>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="DrinksAlcohol">
+            <label class="form-check-label" asp-for="DrinksAlcohol">Drinkt Alcohol</label>
+          </div>
+        </div>
+
+        <div class="my-4">
+          <h3 class="h5">Adres</h3>
+          <div class="row">
+            <div class="col-md-8">
+              <label asp-for="Address.Street" class="form-label">Straat</label>
+              <input type="text" class="form-control" asp-for="Address.Street" placeholder="Straat naam">
+            </div>
+            <div class="col-md-4">
+              <label asp-for="Address.HouseNumber" class="form-label">Huisnummer</label>
+              <input type="text" class="form-control" asp-for="Address.HouseNumber" placeholder="Huisnummer">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label asp-for="Address.City" class="form-label">Stad</label>
+            <input type="text" class="form-control" asp-for="Address.City" placeholder="Stad">
+          </div>
+        </div>
+        
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" asp-for="ReturnUrl" />
+
+        <button type="submit" class="btn btn-primary w-100">Registreren</button>
+        <hr/>
+        <a asp-action="Login" asp-controller="Account">Al een account?</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+  (() => {
+    'use strict'
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+
+<script type="text/javascript">
+  let originalVal = false;
+  $("input[name='Birthday']").change(function() {
+    const obj = $("input[name='Birthday']")[0]
+    let date = obj.valueAsDate;
+    if (date) {
+      const age = getAge(date.toString());
+      const checkbox = $("input[name='DrinksAlcohol']")[0]
+      if (age < 18 && !checkbox.disabled) {
+        originalVal = checkbox.checked;
+        checkbox.checked = false;
+        checkbox.disabled = true;
+      } else if (age >  18 && checkbox.disabled) {
+        checkbox.disabled = false;
+        checkbox.checked = originalVal;
+      }
+    }
+  });
+
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+</script>
+</body>
+</html>
+
+
+
