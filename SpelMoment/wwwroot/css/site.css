@@ -30,10 +30,3 @@
 .dropdown-item.active, .dropdown-item:active {
     background-color: var(--bs-primary)
 }
-
-#hero-image {
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url(/img/hero-banner.jpeg);
-    background-size: cover;
-    background-position: center;
-    height: 65vh
-}

@@ -1,5 +1,6 @@
+
 #hero-image {
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url('https://verwijzerproduction.blob.core.windows.net/denhaag/0002876-1024x682.jpeg');
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3)), url(/img/hero-banner.jpeg);
     background-size: cover;
     background-position: center;
     height: 65vh
