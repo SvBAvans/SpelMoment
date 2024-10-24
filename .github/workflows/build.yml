@@ -30,6 +30,7 @@ jobs:
         run:  |
           dotnet restore
           dotnet tool install --global Microsoft.Web.LibraryManager.Cli
+          cd ./SpelMoment
           libman restore
         
       - name: Build
