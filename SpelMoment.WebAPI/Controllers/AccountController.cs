@@ -50,51 +50,51 @@ public class AccountController
         return TypedResults.Empty;
     }
 
-    [HttpPost("Register")]
-    [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Register([FromBody] RegisterRequest registerRequest)
-    {
-        var emailAddressAttribute = new EmailAddressAttribute();
-        if (string.IsNullOrEmpty(registerRequest.Email) || !emailAddressAttribute.IsValid(registerRequest.Email))
-        {
-            // return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
-        }
-
-        var user = new IdentityUser()
-        {
-            UserName = registerRequest.Email,
-            Email = registerRequest.Email
-        };
-
-        var registerResult = await userManager.CreateAsync(user, registerRequest.Password);
-        if (registerResult.Succeeded)
-        {
-            await userManager.AddClaimAsync(user, new Claim("UserType", "user"));
-            await userManager.AddToRoleAsync(user, registerRequest.Role.ToString());
-            
-            
-            User appUser = new()
-            {
-                FirstName = registerRequest.FirstName,
-                LastName = registerRequest.LastName,
-                Email = registerRequest.Email,
-                Address = new Address {Street = registerRequest.Address.Street, HouseNumber = registerRequest.Address.HouseNumber, City = registerRequest.Address.City},
-                Role = registerRequest.Role,
-                IdentityId = user.Id,
-                Birthday = new DateOnly(),
-                Gender = registerRequest.Gender,
-                DrinksAlcohol = registerRequest.DrinksAlcohol,
-                IsVegetarian = registerRequest.IsVegetarian,
-                HasLactoseIntolerance = registerRequest.HasLactoseIntolerance,
-                HasNutAllergy = registerRequest.HasNutAllergy,
-            };
-            userRepository.Add(appUser);
-
-            return TypedResults.Created();
-        }
-
-        return TypedResults.Problem(registerResult.ToString(), statusCode: StatusCodes.Status400BadRequest);
-    }
+    // [HttpPost("Register")]
+    // [AllowAnonymous]
+    // [ProducesResponseType(StatusCodes.Status201Created)]
+    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // public async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Register([FromBody] RegisterRequest registerRequest)
+    // {
+    //     var emailAddressAttribute = new EmailAddressAttribute();
+    //     if (string.IsNullOrEmpty(registerRequest.Email) || !emailAddressAttribute.IsValid(registerRequest.Email))
+    //     {
+    //         // return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
+    //     }
+    //
+    //     var user = new IdentityUser()
+    //     {
+    //         UserName = registerRequest.Email,
+    //         Email = registerRequest.Email
+    //     };
+    //
+    //     var registerResult = await userManager.CreateAsync(user, registerRequest.Password);
+    //     if (registerResult.Succeeded)
+    //     {
+    //         await userManager.AddClaimAsync(user, new Claim("UserType", "user"));
+    //         await userManager.AddToRoleAsync(user, registerRequest.Role.ToString());
+    //         
+    //         
+    //         User appUser = new()
+    //         {
+    //             FirstName = registerRequest.FirstName,
+    //             LastName = registerRequest.LastName,
+    //             Email = registerRequest.Email,
+    //             Address = new Address {Street = registerRequest.Address.Street, HouseNumber = registerRequest.Address.HouseNumber, City = registerRequest.Address.City},
+    //             Role = registerRequest.Role,
+    //             IdentityId = user.Id,
+    //             Birthday = new DateOnly(),
+    //             Gender = registerRequest.Gender,
+    //             DrinksAlcohol = registerRequest.DrinksAlcohol,
+    //             IsVegetarian = registerRequest.IsVegetarian,
+    //             HasLactoseIntolerance = registerRequest.HasLactoseIntolerance,
+    //             HasNutAllergy = registerRequest.HasNutAllergy,
+    //         };
+    //         userRepository.Add(appUser);
+    //
+    //         return TypedResults.Created();
+    //     }
+    //
+    //     return TypedResults.Problem(registerResult.ToString(), statusCode: StatusCodes.Status400BadRequest);
+    // }
 }
