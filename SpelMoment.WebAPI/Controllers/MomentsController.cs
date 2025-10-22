@@ -53,4 +53,47 @@ public class MomentsController : ControllerBase
         
         return TypedResults.Ok(new MomentResponse {Moment = _mapper.Map<MomentDto>(moment)});
     }
+
+    
+    [HttpPost("{id:int}/register")]
+    [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Results<Ok<SuccessResponse>, EmptyHttpResult, ProblemHttpResult, NotFound, UnauthorizedHttpResult>> RegisterMoment(int id)
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
+                     ?? User.FindFirst("sub")?.Value;
+
+        if (userId == null)
+        {
+            return TypedResults.Unauthorized();
+        }
+
+        var user = _userRepository.GetByIdentityId(userId);
+
+        if (user == null)
+        {
+            return TypedResults.Unauthorized();
+        }
+        
+        var moment = _momentRepository.GetById(id);
+        if (moment == null)
+        {
+            return TypedResults.NotFound();
+        }
+        
+        if (moment.Players.Any(p => p.Id == user.Id))
+            return TypedResults.Ok(new SuccessResponse { Success = true, Message = "Already registered." });
+        
+        // TODO: Add Max Players check
+
+        var players = moment.Players.ToList();
+        players.Add(user);
+
+        moment.Players = players;
+        
+        _momentRepository.Update(moment);
+        
+        return TypedResults.Ok(new SuccessResponse() {Success = true, Message = "Registered for SpelMoment"});
+    }
 }

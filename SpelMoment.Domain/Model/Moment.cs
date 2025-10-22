@@ -13,6 +13,6 @@ public class Moment
     public bool IsVegetarianFriendly { get; set; }
     public bool IsNutAllergyFriendly { get; set; }
     public bool IsNonAlcoholicFriendly { get; set; }
-    public IEnumerable<User> Players { get; } = null!;
+    public IEnumerable<User> Players { get; set; } = null!;
     public IEnumerable<Game> Games { get; set; }
 }
