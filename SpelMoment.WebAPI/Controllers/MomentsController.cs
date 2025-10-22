@@ -59,7 +59,7 @@ public class MomentsController : ControllerBase
     [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Results<Ok<SuccessResponse>, EmptyHttpResult, ProblemHttpResult, NotFound, UnauthorizedHttpResult>> RegisterMoment(int id)
+    public async Task<Results<Created<SuccessResponse>, EmptyHttpResult, ProblemHttpResult, NotFound, UnauthorizedHttpResult>> RegisterMoment(int id)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
                      ?? User.FindFirst("sub")?.Value;
@@ -83,9 +83,20 @@ public class MomentsController : ControllerBase
         }
         
         if (moment.Players.Any(p => p.Id == user.Id))
-            return TypedResults.Ok(new SuccessResponse { Success = true, Message = "Already registered." });
+            return TypedResults.Problem(
+                detail: "Already registered.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
+            
+
+        if (moment.Players.Count() >= moment.MaxPlayers)
+        {           
+            return TypedResults.Problem(
+                detail: "Too many players.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
+        }
         
-        // TODO: Add Max Players check
 
         var players = moment.Players.ToList();
         players.Add(user);
@@ -94,6 +105,6 @@ public class MomentsController : ControllerBase
         
         _momentRepository.Update(moment);
         
-        return TypedResults.Ok(new SuccessResponse() {Success = true, Message = "Registered for SpelMoment"});
+        return TypedResults.Created($"/moments/{moment.Id}/register", new SuccessResponse() {Success = true, Message = "Registered for SpelMoment"});
     }
 }
