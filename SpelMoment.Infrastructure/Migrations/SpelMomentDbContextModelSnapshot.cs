@@ -101,10 +101,6 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<int?>("OrganiserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrganiserId");

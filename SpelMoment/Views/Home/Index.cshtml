@@ -1,4 +1,5 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -12,6 +13,9 @@
             @if (User.Identity == null || !User.Identity.IsAuthenticated) 
             {
                 <a asp-action="Register" asp-controller="Account" class="lead btn btn-primary" role="button">Meld je aan!</a>
+            } else {
+                // TODO: other button
+                <a class="lead btn btn-primary" role="button" href="#moments">Schrijf je in!</a>
             }
         </div>
     </div>
@@ -24,4 +28,64 @@
             </div>
         </div>
     </div>
+    
+    @if (Model.SuggestedMoments != null) {
+    <div class="container my-5 border-top">
+        <div class="text-center mt-3"><h2 id="#moments" class="display-6">Geplande momenten</h2></div>
+        <div class="row mt-5">
+            @foreach (var moment in Model.SuggestedMoments)
+            {
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Id:</strong>
+                                <span>@moment.Id</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Adres:</strong>
+                                <span>@moment.Address.ToDisplayString()</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Organizator:</strong>
+                                <span>@moment.Organiser.ToDisplayString()</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Datum:</strong>
+                                <span>@moment.DateTime.ToString("M") @moment.DateTime.ToString("t")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Lactose Allergie Vriendelijk:</strong>
+                                <span>@(moment.IsLactoseIntoleranceFriendly ? "Ja" : "Nee")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Noten Allergie Vriendelijk:</strong>
+                                <span>@(moment.IsNutAllergyFriendly ? "Ja" : "Nee")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Vegetarish:</strong>
+                                <span>@(moment.IsVegetarianFriendly ? "Ja" : "Nee")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Alohol vrij:</strong>
+                                <span>@(moment.IsNonAlcoholicFriendly ? "Ja" : "Nee")</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <strong>Aantal aangemeld:</strong>
+                                <span>@(moment.Players.Count())</span>
+                            </div>
+                            <!-- Add more properties here --> 
+                        </div>
+                        
+                        <div class="text-center my-3">
+                            <a class="btn btn-primary">Aanmelden</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    }
+    
+
 </div>

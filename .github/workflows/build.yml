@@ -31,7 +31,7 @@ jobs:
           dotnet restore
           dotnet tool install --global Microsoft.Web.LibraryManager.Cli
           cd ./SpelMoment
-          libman restore
+#          libman restore
           cd ..
         
       - name: Build
@@ -41,8 +41,11 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         
       - name: Publish
-        run: dotnet publish ./SpelMoment --output ./dist/ui --configuration Release  
-        
+        run: dotnet publish ./SpelMoment --output ./dist/ui --configuration Release
+
+      - name: Publish API
+        run: dotnet publish ./SpelMoment.WebApi --output ./dist/api --configuration Release
+      
       - name: Bundle EF Project
         run: |
           dotnet tool install --global dotnet-ef
@@ -55,6 +58,12 @@ jobs:
         with:
           name: spelmoment
           path: ./dist/ui
+          
+      - name: Upload artifact API
+        uses: actions/upload-artifact@v4
+        with:
+          name: spelmoment-api
+          path: ./dist/api
   
       - name: Upload artifact Migrations
         uses: actions/upload-artifact@v4

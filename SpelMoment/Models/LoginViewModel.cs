@@ -7,10 +7,12 @@ public class LoginViewModel
 {
     [Required]
     [EmailAddress]
-    public string Email { get; set; }
+    public string Email { get; set; } = null!;
+
     [Required]
     [UIHint("Password")]
     [PasswordPropertyText]
-    public string Password { get; set; }
+    public string Password { get; set; } = null!;
+
     public string? ReturnUrl { get; set; }
 }

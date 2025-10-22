@@ -1,4 +1,5 @@
-﻿using SpelMoment.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SpelMoment.Domain.Interfaces;
 using SpelMoment.Domain.Model;
 using SpelMoment.Infrastructure.Data;
 
@@ -31,12 +32,13 @@ public class MomentRepository : IMomentRepository
 
     public IEnumerable<Moment> GetAll()
     {
-        return dbContext.Moments.ToList();
+        return dbContext.Moments.Include(moment => moment.Organiser).Include(moment => moment.Players).ToList();
     }
 
     public Moment? GetById(int id)
     {
-        return dbContext.Moments.Find(id);
+        return dbContext.Moments.Include(moment => moment.Organiser)
+            .Include(moment => moment.Players).FirstOrDefault(moment => moment.Id == id);
     }
 
     public void Update(Moment moment)
