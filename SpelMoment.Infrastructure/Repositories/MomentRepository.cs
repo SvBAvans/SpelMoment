@@ -23,11 +23,9 @@ public class MomentRepository : IMomentRepository
     public void Delete(int id)
     {
         var moment = dbContext.Moments.Find(id);
-        if (moment != null)
-        {
-            dbContext.Moments.Remove(moment);
-            dbContext.SaveChanges();
-        }
+        if (moment == null) return;
+        dbContext.Moments.Remove(moment);
+        dbContext.SaveChanges();
     }
 
     public IEnumerable<Moment> GetAll()

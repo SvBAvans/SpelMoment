@@ -4,5 +4,5 @@ namespace SpelMoment.WebAPI.Models.Response.Moment;
 
 public class MomentsResponse
 {
-    public IEnumerable<MomentDto> Moments { get; set; }
+    public IEnumerable<MomentDto> Moments { get; set; } = null!;
 }

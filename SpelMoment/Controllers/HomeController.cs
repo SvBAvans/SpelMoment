@@ -19,7 +19,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        IEnumerable<Moment> suggestedMoments = null;
+        IEnumerable<Moment>? suggestedMoments = null;
         
         if (User.Identity != null && User.Identity.IsAuthenticated) {
             suggestedMoments = _momentRepository.GetAll().OrderBy(moment => moment.DateTime).Where(moment => moment.DateTime >  DateTime.Now);

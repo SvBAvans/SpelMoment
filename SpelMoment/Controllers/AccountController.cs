@@ -98,7 +98,7 @@ public class AccountController : Controller
 
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login(string returnUrl = null)
+    public IActionResult Login(string returnUrl)
     {
         return View(new LoginViewModel {ReturnUrl = returnUrl});
     }

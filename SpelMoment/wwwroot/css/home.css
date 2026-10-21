@@ -1,0 +1,387 @@
+
+/* Homepage kleuren */
+
+:root {
+    --primary: #1e6a41;
+    --primary-dark: #14502f;
+    --accent: #f4bd65;
+
+    --text: #24382d;
+    --muted: #64746a;
+    --background: #f5f8f5;
+}
+
+/* Hero sectie */
+
+.home-hero {
+    position: relative;
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    color: white;
+
+    background:
+            linear-gradient(
+                    90deg,
+                    rgba(13, 42, 27, 0.90) 0%,
+                    rgba(13, 42, 27, 0.65) 50%,
+                    rgba(13, 42, 27, 0.15) 100%
+            ),
+            url('/img/hero-banner.jpeg')
+            center / cover no-repeat;
+}
+
+.hero-content {
+    max-width: 650px;
+    padding: 80px 0;
+}
+
+.hero-label {
+    display: inline-block;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.hero-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.12;
+    margin-bottom: 24px;
+}
+
+.hero-content h1 span {
+    display: block;
+    color: var(--accent);
+}
+
+.hero-content p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #e4f0e8;
+    margin-bottom: 32px;
+}
+
+.hero-content .btn {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+}
+
+.hero-content .btn-outline-light:hover {
+    color: var(--primary-dark);
+    background-color: white;
+}
+
+/* Sectie titels */
+
+.section-label {
+    display: inline-block;
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+/* Introductie */
+
+.intro-section {
+    background-color: white;
+}
+
+.intro-text {
+    max-width: 720px;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--muted);
+}
+
+/* Voordelen kaarten */
+
+.feature-card {
+    background-color: white;
+    border: 1px solid #e6ece8;
+    border-radius: 18px;
+    padding: 36px 24px;
+    height: 100%;
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(20, 60, 35, 0.08);
+}
+
+.feature-icon {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* Geplande spelavonden */
+
+.moments-section {
+    background-color: var(--background);
+    scroll-margin-top: 80px;
+}
+
+.moment-card {
+    display: flex;
+    flex-direction: column;
+
+    background-color: white;
+    border: 1px solid #e6ece8;
+    border-radius: 18px;
+    overflow: hidden;
+
+    box-shadow: 0 5px 20px rgba(20, 60, 35, 0.04);
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.moment-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(20, 60, 35, 0.10);
+}
+
+/* Kaart header */
+
+.moment-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    background-color: #e5f2e9;
+    padding: 22px;
+}
+
+.date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 68px;
+    height: 72px;
+
+    background-color: white;
+    border-radius: 12px;
+    color: var(--primary);
+}
+
+.date-badge strong {
+    font-size: 1.7rem;
+    line-height: 1.1;
+}
+
+.date-badge span {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.time-badge {
+    background-color: white;
+    color: var(--primary);
+
+    border-radius: 30px;
+    padding: 8px 14px;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* Kaart inhoud */
+
+.moment-card-body {
+    padding: 24px;
+    flex-grow: 1;
+}
+
+.moment-title {
+    font-size: 1.3rem;
+    font-weight: 750;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.moment-info p {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    margin-bottom: 14px;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+.moment-info p span {
+    flex-shrink: 0;
+}
+
+.moment-card-body hr {
+    border-color: #e6ece8;
+    opacity: 1;
+    margin: 20px 0;
+}
+
+/* Dieetwensen */
+
+.diet-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+}
+
+.diet-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.diet-tag {
+    display: inline-flex;
+    align-items: center;
+
+    background-color: #e4f3e8;
+    color: #276742;
+
+    padding: 7px 11px;
+    border-radius: 8px;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Kaart footer */
+
+.moment-card-footer {
+    padding: 0 24px 24px;
+}
+
+.moment-card-footer .btn {
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-weight: 600;
+}
+
+/* Geen spelavonden melding */
+
+.empty-state {
+    background-color: white;
+    border: 1px solid #e6ece8;
+    border-radius: 18px;
+    padding: 60px 24px;
+}
+
+.empty-state h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+/* Onderste call-to-action */
+
+.join-section {
+    background-color: var(--primary);
+    color: white;
+}
+
+.join-section h2 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    font-weight: 800;
+}
+
+.join-section p {
+    max-width: 580px;
+    margin: 18px auto 28px;
+    color: #e4f0e8;
+    line-height: 1.8;
+}
+
+.join-section .btn-light {
+    border-radius: 10px;
+    padding: 12px 28px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Responsive */
+
+@media (max-width: 767px) {
+    .home-hero {
+        min-height: 480px;
+        text-align: center;
+
+        background-position: center;
+    }
+
+    .hero-content {
+        padding: 65px 0;
+    }
+
+    .hero-content .d-flex {
+        justify-content: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2.4rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .feature-card {
+        padding: 28px 20px;
+    }
+
+    .moment-card-body {
+        padding: 20px;
+    }
+
+    .moment-card-footer {
+        padding: 0 20px 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feature-card,
+    .moment-card {
+        transition: none;
+    }
+
+    .feature-card:hover,
+    .moment-card:hover {
+        transform: none;
+    }
+}
