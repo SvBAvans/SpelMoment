@@ -1,18 +1,16 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SpelMoment.Models;
 
 public class LoginViewModel
 {
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; } = null!;
+    [Required(ErrorMessage = "Vul je e-mailadres in.")]
+    [EmailAddress(ErrorMessage = "Vul een geldig e-mailadres in.")]
+    public string Email { get; set; } = string.Empty;
 
-    [Required]
-    [UIHint("Password")]
-    [PasswordPropertyText]
-    public string Password { get; set; } = null!;
+    [Required(ErrorMessage = "Vul je wachtwoord in.")]
+    [DataType(DataType.Password)]
+    public string Password { get; set; } = string.Empty;
 
     public string? ReturnUrl { get; set; }
 }

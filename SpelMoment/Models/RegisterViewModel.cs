@@ -6,41 +6,49 @@ namespace SpelMoment.Models;
 
 public class RegisterViewModel
 {
-    [Required]
-    public string FirstName { get; set; } = null!;
+    [Required(ErrorMessage = "Vul je voornaam in.")]
+    [StringLength(100, ErrorMessage = "Je voornaam mag maximaal 100 tekens bevatten.")]
+    public string FirstName { get; set; } = string.Empty;
 
-    [Required]
-    public string LastName { get; set; } = null!;
+    [Required(ErrorMessage = "Vul je achternaam in.")]
+    [StringLength(100, ErrorMessage = "Je achternaam mag maximaal 100 tekens bevatten.")]
+    public string LastName { get; set; } = string.Empty;
 
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; } = null!;
+    [Required(ErrorMessage = "Vul je e-mailadres in.")]
+    [EmailAddress(ErrorMessage = "Vul een geldig e-mailadres in.")]
+    public string Email { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "Vul een wachtwoord in.")]
+    [MinLength(8, ErrorMessage = "Je wachtwoord moet minimaal 8 tekens bevatten.")]
     [PasswordPropertyText]
-    public string Password { get; set; } = null!;
+    public string Password { get; set; } = string.Empty;
 
-    [Required]
+    [Required(ErrorMessage = "Bevestig je wachtwoord.")]
+    [Compare(
+        nameof(Password),
+        ErrorMessage = "De wachtwoorden komen niet overeen."
+    )]
     [PasswordPropertyText]
-    public string PasswordConfirmation { get; set; } = null!;
+    public string PasswordConfirmation { get; set; } = string.Empty;
 
-    [Required]
-    public DateOnly Birthday { get; set; }
-    [Required]
-    public User.GenderEnum Gender { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Vul je geboortedatum in.")]
+    public DateOnly? Birthday { get; set; }
+
+    [Required(ErrorMessage = "Selecteer je geslacht.")]
+    public User.GenderEnum? Gender { get; set; }
+
     public bool HasLactoseIntolerance { get; set; }
-    [Required]
+
     public bool HasNutAllergy { get; set; }
-    [Required]
+
     public bool IsVegetarian { get; set; }
-    [Required]
+
     public bool DrinksAlcohol { get; set; }
-    
-    [Required]
-    public Address Address { get; set; } = null!;
+
+    [Required(ErrorMessage = "Vul je adresgegevens in.")]
+    public Address Address { get; set; } = new();
 
     public string? ReturnUrl { get; set; }
-    
+
     public required UserRole Role { get; set; }
 }

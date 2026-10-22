@@ -1,6 +1,3 @@
-
-/* Homepage kleuren */
-
 :root {
     --primary: #1e6a41;
     --primary-dark: #14502f;
@@ -11,7 +8,6 @@
     --background: #f5f8f5;
 }
 
-/* Hero sectie */
 
 .home-hero {
     position: relative;
@@ -76,8 +72,6 @@
     background-color: white;
 }
 
-/* Sectie titels */
-
 .section-label {
     display: inline-block;
     color: var(--primary);
@@ -95,8 +89,6 @@
     margin-bottom: 20px;
 }
 
-/* Introductie */
-
 .intro-section {
     background-color: white;
 }
@@ -107,8 +99,6 @@
     line-height: 1.9;
     color: var(--muted);
 }
-
-/* Voordelen kaarten */
 
 .feature-card {
     background-color: white;
@@ -145,8 +135,6 @@
     margin-bottom: 0;
 }
 
-/* Geplande spelavonden */
-
 .moments-section {
     background-color: var(--background);
     scroll-margin-top: 80px;
@@ -172,8 +160,6 @@
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(20, 60, 35, 0.10);
 }
-
-/* Kaart header */
 
 .moment-card-header {
     display: flex;
@@ -219,8 +205,6 @@
     font-weight: 700;
 }
 
-/* Kaart inhoud */
-
 .moment-card-body {
     padding: 24px;
     flex-grow: 1;
@@ -253,8 +237,6 @@
     margin: 20px 0;
 }
 
-/* Dieetwensen */
-
 .diet-title {
     font-size: 0.95rem;
     font-weight: 700;
@@ -282,8 +264,6 @@
     font-weight: 600;
 }
 
-/* Kaart footer */
-
 .moment-card-footer {
     padding: 0 24px 24px;
 }
@@ -293,8 +273,6 @@
     padding: 12px 18px;
     font-weight: 600;
 }
-
-/* Geen spelavonden melding */
 
 .empty-state {
     background-color: white;
@@ -308,8 +286,6 @@
     font-weight: 700;
     color: var(--text);
 }
-
-/* Onderste call-to-action */
 
 .join-section {
     background-color: var(--primary);
@@ -334,8 +310,6 @@
     font-weight: 700;
     color: var(--primary);
 }
-
-/* Responsive */
 
 @media (max-width: 767px) {
     .home-hero {

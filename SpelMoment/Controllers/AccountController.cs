@@ -52,7 +52,7 @@ public class AccountController : Controller
         
         if (!ModelState.IsValid)
         {
-            return View();
+            return View(model);
         }
 
         var user = new IdentityUser()
@@ -76,8 +76,8 @@ public class AccountController : Controller
                 Address = new Address {Street = model.Address.Street, HouseNumber = model.Address.HouseNumber, City = model.Address.City},
                 Role = model.Role,
                 IdentityId = user.Id,
-                Birthday = model.Birthday,
-                Gender = model.Gender,
+                Birthday = model.Birthday!.Value,
+                Gender = model.Gender!.Value,
                 DrinksAlcohol = model.DrinksAlcohol,
                 IsVegetarian = model.IsVegetarian,
                 HasLactoseIntolerance = model.HasLactoseIntolerance,

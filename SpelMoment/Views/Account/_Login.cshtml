@@ -1,0 +1,159 @@
+
+@model LoginViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Inloggen";
+}
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Inloggen - SpelMoment</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+<main class="auth-page">
+    <div class="auth-wrapper">
+
+        <div class="auth-info">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-logo">
+                🎲 SpelMoment
+            </a>
+
+            <div class="auth-info-content">
+                <span class="auth-label">
+                    Welkom bij SpelMoment
+                </span>
+
+                <h1>
+                    Samen spelen,
+                    <span>samen leren.</span>
+                </h1>
+
+                <p>
+                    Ontmoet nieuwe mensen, ontdek leuke
+                    bordspellen en oefen spelenderwijs
+                    je Nederlands.
+                </p>
+
+                <div class="auth-benefits">
+                    <p>🎲 Ontdek gezellige spelavonden</p>
+                    <p>💬 Oefen je Nederlands</p>
+                    <p>🤝 Maak nieuwe vrienden</p>
+                </div>
+            </div>
+
+            <div class="auth-info-footer">
+                © @DateTime.Now.Year SpelMoment
+            </div>
+        </div>
+
+        <div class="auth-form-section">
+            <div class="auth-form-container">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="back-link">
+                    ← Terug naar home
+                </a>
+
+                <div class="auth-heading">
+                    <h2>Welkom terug!</h2>
+                    <p>
+                        Log in op je account om jouw
+                        spelavonden te bekijken.
+                    </p>
+                </div>
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"
+                         role="alert">
+                    </div>
+
+                    <input type="hidden"
+                           asp-for="ReturnUrl" />
+
+                    <div class="mb-4">
+                        <label asp-for="Email"
+                               class="form-label">
+                            E-mailadres
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="naam@voorbeeld.nl"
+                               autocomplete="email"
+                               required />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger small">
+                        </span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Password"
+                               class="form-label">
+                            Wachtwoord
+                        </label>
+
+                        <input asp-for="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Voer je wachtwoord in"
+                               autocomplete="current-password"
+                               required />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger small">
+                        </span>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary auth-submit w-100">
+                        Inloggen
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>Nieuw bij SpelMoment?</span>
+                    </div>
+
+                    <a asp-controller="Account"
+                       asp-action="Register"
+                       asp-route-returnUrl="@Model.ReturnUrl"
+                       class="btn btn-outline-success w-100 auth-secondary">
+                        Maak een account aan
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

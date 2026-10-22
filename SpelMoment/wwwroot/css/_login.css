@@ -1,0 +1,242 @@
+
+/* Algemene authenticatiepagina */
+
+.auth-page {
+    min-height: 100vh;
+    background-color: #f5f8f5;
+}
+
+.auth-wrapper {
+    display: grid;
+    grid-template-columns: minmax(320px, 42%) 1fr;
+    min-height: 100vh;
+}
+
+/* Linkerkant */
+
+.auth-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background:
+            radial-gradient(
+                    circle at 80% 15%,
+                    rgba(255, 255, 255, 0.12),
+                    transparent 35%
+            ),
+            linear-gradient(
+                    145deg,
+                    #1e6a41,
+                    #12452a
+            );
+
+    color: white;
+    padding: 48px clamp(28px, 4vw, 80px);
+}
+
+.auth-logo {
+    color: white;
+    text-decoration: none;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.auth-logo:hover {
+    color: #f4bd65;
+}
+
+.auth-info-content {
+    max-width: 440px;
+    padding: 70px 0;
+}
+
+.auth-label {
+    display: inline-block;
+    color: #f4bd65;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.auth-info h1 {
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 25px;
+}
+
+.auth-info h1 span {
+    display: block;
+    color: #f4bd65;
+}
+
+.auth-info-content > p {
+    color: #e0efe5;
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
+.auth-benefits {
+    margin-top: 36px;
+}
+
+.auth-benefits p {
+    margin-bottom: 16px;
+    color: #f1f8f3;
+    font-weight: 500;
+}
+
+.auth-info-footer {
+    color: #c3dfcc;
+    font-size: 0.85rem;
+}
+
+/* Rechterkant */
+
+.auth-form-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 30px;
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 430px;
+}
+
+.back-link {
+    display: inline-block;
+    color: #64746a;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 38px;
+}
+
+.back-link:hover {
+    color: #1e6a41;
+}
+
+.auth-heading {
+    margin-bottom: 35px;
+}
+
+.auth-heading h2 {
+    color: #24382d;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.auth-heading p {
+    color: #64746a;
+    line-height: 1.7;
+}
+
+/* Formuliervelden */
+
+.auth-form-container .form-label {
+    color: #24382d;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+.auth-form-container .form-control,
+.auth-form-container .form-select {
+    border: 1px solid #dce5df;
+    border-radius: 10px;
+    padding: 13px 15px;
+    min-height: 50px;
+    background-color: white;
+}
+
+.auth-form-container .form-control:focus,
+.auth-form-container .form-select:focus {
+    border-color: #1e6a41;
+    box-shadow: 0 0 0 0.2rem rgba(30, 106, 65, 0.12);
+}
+
+.auth-form-container .form-control::placeholder {
+    color: #9aa8a0;
+}
+
+/* Knoppen */
+
+.auth-submit,
+.auth-secondary {
+    min-height: 50px;
+    border-radius: 10px;
+    font-weight: 700;
+    padding: 12px 20px;
+}
+
+/* Scheidingslijn */
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 25px 0;
+    color: #7a887f;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #dce5df;
+}
+
+/* Validatie */
+
+.field-validation-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+}
+
+.input-validation-error {
+    border-color: #dc3545 !important;
+}
+
+/* Responsive */
+
+@media (max-width: 991px) {
+    .auth-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-info {
+        padding: 28px 30px;
+    }
+
+    .auth-info-content,
+    .auth-info-footer {
+        display: none;
+    }
+
+    .auth-form-section {
+        padding: 45px 24px 70px;
+    }
+}
+
+@media (max-width: 575px) {
+    .auth-form-section {
+        padding: 30px 20px 60px;
+    }
+
+    .auth-heading h2 {
+        font-size: 1.7rem;
+    }
+
+    .back-link {
+        margin-bottom: 30px;
+    }
+}
