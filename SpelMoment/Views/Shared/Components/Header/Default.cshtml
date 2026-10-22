@@ -40,14 +40,6 @@
 
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Moments"
-                               asp-action="MyRegistrations">
-                                Mijn inschrijvingen
-                            </a>
-                        </li>
-
                         <li class="nav-item dropdown">
                             <button class="btn btn-outline-success dropdown-toggle"
                                     type="button"
@@ -57,6 +49,30 @@
                             </button>
 
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Account"
+                                       asp-action="Profile">
+                                        Profiel
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Account"
+                                       asp-action="RegisteredMoments">
+                                        Mijn inschrijvingen
+                                    </a>
+                                </li>
+                                                                
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="Account"
+                                       asp-action="OrganizedMoments">
+                                        Georganiseerde Momenten
+                                    </a>
+                                </li>
+                                
                                 <li>
                                     <a class="dropdown-item"
                                        asp-controller="Account"

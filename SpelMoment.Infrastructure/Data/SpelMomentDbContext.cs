@@ -14,6 +14,7 @@ public class SpelMomentDbContext : DbContext
     public DbSet<Moment> Moments => Set<Moment>();
     public DbSet<Game> Games => Set<Game>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<Review> Reviews { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,7 +32,14 @@ public class SpelMomentDbContext : DbContext
         modelBuilder.Entity<Game>()
             .HasOne(game => game.Moment)
             .WithMany(moment => moment.Games)
-            .HasForeignKey(game => game.MomentId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Review>()
+            .HasOne(review => review.Moment)
+            .WithMany(moment => moment.Reviews);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(review => review.Reviewer)
+            .WithMany();
     }
 }

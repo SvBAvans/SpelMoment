@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpelMoment.Domain.Interfaces;
 using SpelMoment.Domain.Model;
 using SpelMoment.Models;
+using SpelMoment.ViewModels;
 
 namespace SpelMoment.Controllers;
 
@@ -12,11 +13,13 @@ public class MomentsController : Controller
 {
     private readonly IMomentRepository momentRepository;
     private readonly IUserRepository userRepository;
+    private readonly IReviewRepository reviewRepository;
 
-    public MomentsController(IMomentRepository momentRepository, IUserRepository userRepository)
+    public MomentsController(IMomentRepository momentRepository, IUserRepository userRepository, IReviewRepository reviewRepository)
     {
         this.momentRepository = momentRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     [HttpGet]
@@ -28,16 +31,68 @@ public class MomentsController : Controller
     }
 
     [HttpGet]
+
     [AllowAnonymous]
     public IActionResult Details(int id)
     {
         var moment = momentRepository.GetById(id);
+        if (moment == null) return NotFound();
 
-        if (moment == null)
-            return NotFound();
+        
+        var reviews = reviewRepository.GetByMomentId(id).ToList();
 
+        ViewBag.Reviews = reviews;
+        
+        var warnings = new List<string>();
+
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = identityId == null
+                ? null
+                : userRepository.GetByIdentityId(identityId);
+
+            if (user != null)
+            {
+                if (user.HasLactoseIntolerance && !moment.IsLactoseIntoleranceFriendly)
+                    warnings.Add("Er zijn geen lactosevrije opties beschikbaar.");
+
+                if (user.HasNutAllergy && !moment.IsNutAllergyFriendly)
+                    warnings.Add("Er zijn geen notenvrije opties beschikbaar.");
+
+                if (user.IsVegetarian && !moment.IsVegetarianFriendly)
+                    warnings.Add("Er zijn geen vegetarische opties beschikbaar.");
+
+                if (!user.DrinksAlcohol && !moment.IsNonAlcoholicFriendly)
+                    warnings.Add("Er zijn geen alcoholvrije dranken beschikbaar.");
+            }
+            
+            var organiserReviews = reviewRepository
+                .GetByOrganiserId(moment.Organiser!.Id)
+                .ToList();
+
+            ViewBag.OrganiserAverageRating = organiserReviews.Any()
+                ? organiserReviews.Average(review => review.Rating)
+                : 0;
+
+            ViewBag.OrganiserReviewCount = organiserReviews.Count;
+        
+            ViewBag.OrganisedMomentCount = momentRepository.GetAll()
+                .Count(m => m.Organiser?.Id == moment.Organiser?.Id
+                            && m.Organiser != null);
+            
+            ViewBag.CanReview =
+                user != null &&
+                moment.DateTime <= DateTime.Now &&
+                moment.Players.Any(player => player.Id == user.Id) &&
+                !reviews.Any(review => review.Reviewer.Id == user.Id);
+        }
+
+        ViewBag.DietWarnings = warnings;
+        
         return View(moment);
     }
+
 
     [HttpGet]
     public IActionResult Create()
@@ -329,7 +384,7 @@ public class MomentsController : Controller
                 game = new Game
                 {
                     Id = Guid.NewGuid(),
-                    MomentId = moment.Id
+                    Moment = moment
                 };
 
                 moment.Games.Add(game);
@@ -376,5 +431,62 @@ public class MomentsController : Controller
 
         TempData["SuccessMessage"] = "Je spelmoment is succesvol verwijderd.";
         return RedirectToAction(nameof(Index));
+    }
+    
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult AddReview(CreateReviewViewModel model)
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = identityId == null
+            ? null
+            : userRepository.GetByIdentityId(identityId);
+
+        if (user == null)
+            return Forbid();
+
+        var moment = momentRepository.GetById(model.MomentId);
+
+        if (moment == null)
+            return NotFound();
+
+        if (!ModelState.IsValid)
+        {
+            TempData["ErrorMessage"] = "Vul een geldige score en reviewtekst in.";
+            return RedirectToAction("Details", new { id = model.MomentId });
+        }
+
+        if (moment.DateTime > DateTime.Now)
+        {
+            TempData["ErrorMessage"] = "Je kunt pas na afloop een review plaatsen.";
+            return RedirectToAction("Details", new { id = model.MomentId });
+        }
+
+        if (!moment.Players.Any(player => player.Id == user.Id))
+        {
+            TempData["ErrorMessage"] = "Alleen deelnemers kunnen een review plaatsen.";
+            return RedirectToAction("Details", new { id = model.MomentId });
+        }
+
+        if (reviewRepository.GetByMomentId(model.MomentId)
+            .Any(review => review.Reviewer.Id == user.Id))
+        {
+            TempData["ErrorMessage"] = "Je hebt al een review geplaatst.";
+            return RedirectToAction("Details", new { id = model.MomentId });
+        }
+
+        var review = new Review
+        {
+            Rating = model.Rating,
+            Text = model.Text.Trim(),
+            Reviewer = user,
+            Moment = moment
+        };
+
+        reviewRepository.Add(review);
+
+        TempData["SuccessMessage"] = "Je review is geplaatst!";
+        return RedirectToAction("Details", new { id = model.MomentId });
     }
 }

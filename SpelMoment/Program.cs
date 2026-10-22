@@ -51,6 +51,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

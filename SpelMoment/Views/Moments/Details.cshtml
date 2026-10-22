@@ -1,5 +1,6 @@
 
 @using System.Security.Claims
+@using SpelMoment.Domain.Model
 @model SpelMoment.Domain.Model.Moment
 
 @{
@@ -11,6 +12,10 @@
     var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var isRegistered = Model.Players.Any(player => player.IdentityId == identityId);
     var isOrganiser = Model.Organiser?.IdentityId == identityId && identityId != null;
+    var dietWarnings = ViewBag.DietWarnings as List<string> ?? new List<string>();
+    
+    var reviews = ViewBag.Reviews as List<Review> ?? new List<Review>();
+    bool canReview = ViewBag.CanReview == true;
 }
 
 <div class="container py-4">
@@ -59,7 +64,38 @@
 
                         <div class="col-md-6">
                             <strong>👤 Organisator</strong>
-                            <p class="mb-0">@(Model.Organiser?.ToDisplayString() ?? "Onbekend")</p>
+
+                            <p class="mb-1">
+                                @(Model.Organiser?.ToDisplayString() ?? "Onbekend")
+                            </p>
+
+                            @if (Model.Organiser != null)
+                            {
+                                <div class="small text-muted mb-1">
+                                    🎲 @ViewBag.OrganisedMomentCount spelavonden georganiseerd
+                                </div>
+
+                                @if (ViewBag.OrganiserReviewCount > 0)
+                                {
+                                    <div>
+                                        <span class="text-warning">★</span>
+
+                                        <strong>
+                                            @(((double)ViewBag.OrganiserAverageRating).ToString("0.0")) / 5
+                                        </strong>
+
+                                        <span class="text-muted small">
+                                            (@ViewBag.OrganiserReviewCount reviews)
+                                        </span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">
+                                        Nog geen beoordelingen
+                                    </span>
+                                }
+                            }
                         </div>
 
                         <div class="col-md-6">
@@ -155,6 +191,20 @@
                     }
                     else if (isLoggedIn)
                     {
+                        @if (dietWarnings.Any())
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Let op: niet alle dieetwensen worden ondersteund.</strong>
+
+                                <ul class="mb-0 mt-2">
+                                    @foreach (var warning in dietWarnings)
+                                    {
+                                        <li>@warning</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        
                         <form asp-controller="Moments" asp-action="Join" asp-route-id="@Model.Id" method="post">
                             <button type="submit" class="btn btn-primary w-100">Aanmelden</button>
                         </form>
@@ -205,5 +255,84 @@
                 </div>
             </div>
         </div>
+        
+        <div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h3 class="mb-3">Reviews</h3>
+
+        @if (!reviews.Any())
+        {
+            <p class="text-muted">
+                Er zijn nog geen reviews voor deze spelavond.
+            </p>
+        }
+        else
+        {
+            @foreach (var review in reviews)
+            {
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="d-flex justify-content-between">
+                        <strong>
+                            @review.Reviewer.FirstName
+                            @review.Reviewer.LastName
+                        </strong>
+
+                        <span class="text-warning">
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <span>★</span>
+                            }
+                        </span>
+                    </div>
+
+                    <p class="mb-0 mt-2">@review.Text</p>
+                </div>
+            }
+        }
+
+        @if (canReview)
+        {
+            <h4 class="mt-4">Schrijf een review</h4>
+
+            <form asp-controller="Moments"
+                  asp-action="AddReview"
+                  method="post">
+
+                <input type="hidden"
+                       name="MomentId"
+                       value="@Model.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label">Beoordeling</label>
+
+                    <select name="Rating"
+                            class="form-select"
+                            required>
+                        <option value="">Kies een score</option>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <option value="@i">@i sterren</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Review</label>
+
+                    <textarea name="Text"
+                              class="form-control"
+                              rows="3"
+                              required></textarea>
+                </div>
+
+                <button type="submit"
+                        class="btn text-white"
+                        style="background-color: #1e6a41;">
+                    Review plaatsen
+                </button>
+            </form>
+        }
+    </div>
+</div>
     </div>
 </div>

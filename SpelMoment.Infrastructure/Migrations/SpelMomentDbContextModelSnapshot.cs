@@ -114,6 +114,36 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.ToTable("Moments", "SpelMoment");
                 });
 
+            modelBuilder.Entity("SpelMoment.Domain.Model.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MomentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MomentId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.ToTable("Reviews", "SpelMoment");
+                });
+
             modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>
                 {
                     b.Property<int>("Id")
@@ -227,6 +257,25 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Navigation("Organiser");
                 });
 
+            modelBuilder.Entity("SpelMoment.Domain.Model.Review", b =>
+                {
+                    b.HasOne("SpelMoment.Domain.Model.Moment", "Moment")
+                        .WithMany("Reviews")
+                        .HasForeignKey("MomentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SpelMoment.Domain.Model.User", "Reviewer")
+                        .WithMany()
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Moment");
+
+                    b.Navigation("Reviewer");
+                });
+
             modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>
                 {
                     b.OwnsOne("SpelMoment.Domain.Model.Address", "Address", b1 =>
@@ -260,6 +309,8 @@ namespace SpelMoment.Infrastructure.Migrations
             modelBuilder.Entity("SpelMoment.Domain.Model.Moment", b =>
                 {
                     b.Navigation("Games");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.User", b =>

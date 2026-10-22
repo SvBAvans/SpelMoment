@@ -14,17 +14,19 @@ public class AccountController : Controller
     private readonly UserManager<IdentityUser> userManager;
     private readonly SignInManager<IdentityUser> signInManager;
     private readonly RoleManager<IdentityRole> roleManager;
-    private readonly IUserRepository UserRepository;
+    private readonly IUserRepository userRepository;
+    private readonly IMomentRepository momentRepository;
     
     private readonly ILogger<AccountController> _logger;
 
-    public AccountController(ILogger<AccountController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository)
+    public AccountController(ILogger<AccountController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository, IMomentRepository momentRepository)
     {
         _logger = logger;
         this.userManager = userManager;
         this.signInManager = signInManager;
         this.roleManager = roleManager;
-        UserRepository = userRepository;
+        this.userRepository = userRepository;
+        this.momentRepository = momentRepository;
     }
 
     [HttpGet]
@@ -83,7 +85,7 @@ public class AccountController : Controller
                 HasLactoseIntolerance = model.HasLactoseIntolerance,
                 HasNutAllergy = model.HasNutAllergy,
             };
-            UserRepository.Add(appUser);
+            userRepository.Add(appUser);
             
             return RedirectToAction("Login", new { returnUrl = model.ReturnUrl ?? "/" });
         }
@@ -128,4 +130,136 @@ public class AccountController : Controller
         await signInManager.SignOutAsync();
         return Redirect(returnUrl);
     }
+    
+    
+    [HttpGet]
+    public IActionResult Profile()
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = identityId == null
+            ? null
+            : userRepository.GetByIdentityId(identityId);
+
+        if (user == null)
+            return Forbid();
+
+        var model = new ProfileViewModel
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Birthday = user.Birthday,
+            Street = user.Address!.Street,
+            HouseNumber = user.Address!.HouseNumber,
+            City = user.Address!.City,
+            HasLactoseIntolerance = user.HasLactoseIntolerance,
+            HasNutAllergy = user.HasNutAllergy,
+            IsVegetarian = user.IsVegetarian,
+            WantsNonAlcoholicDrinks = !user.DrinksAlcohol
+        };
+
+        return View(model);
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Profile(ProfileViewModel model)
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = identityId == null
+            ? null
+            : userRepository.GetByIdentityId(identityId);
+
+        if (user == null)
+            return Forbid();
+
+        if (model.Birthday > DateOnly.FromDateTime(DateTime.Today))
+        {
+            ModelState.AddModelError(
+                nameof(model.Birthday),
+                "Je geboortedatum mag niet in de toekomst liggen.");
+        }
+
+        if (model.Birthday > DateOnly.FromDateTime(DateTime.Today.AddYears(-16)))
+        {
+            ModelState.AddModelError(
+                nameof(model.Birthday),
+                "Je moet minimaal 16 jaar oud zijn.");
+        }
+        
+        if (user.OrganizedMoments?.Any() == true &&
+            model.Birthday > DateOnly.FromDateTime(DateTime.Today.AddYears(-18)))
+        {
+            ModelState.AddModelError(
+                nameof(model.Birthday),
+                "Als organisator moet je minimaal 18 jaar oud zijn.");
+        }
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        user.FirstName = model.FirstName.Trim();
+        user.LastName = model.LastName.Trim();
+        user.Birthday = model.Birthday;
+        
+        user.Address.Street = model.Street.Trim();
+        user.Address.HouseNumber = model.HouseNumber.Trim();
+        user.Address.City = model.City.Trim();
+
+        user.HasLactoseIntolerance = model.HasLactoseIntolerance;
+        user.HasNutAllergy = model.HasNutAllergy;
+        user.IsVegetarian = model.IsVegetarian;
+        user.DrinksAlcohol = !model.WantsNonAlcoholicDrinks;
+
+        userRepository.Update(user);
+
+        TempData["SuccessMessage"] = "Je profiel is succesvol bijgewerkt.";
+
+        return RedirectToAction(nameof(Profile));
+    }
+    
+    
+    [Authorize]
+    [HttpGet]
+    public IActionResult OrganizedMoments()
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = identityId == null
+            ? null
+            : userRepository.GetByIdentityId(identityId);
+
+        if (user == null)
+            return Forbid();
+
+        var moments = momentRepository.GetAll()
+            .Where(moment => moment.Organiser?.Id == user.Id)
+            .OrderBy(moment => moment.DateTime)
+            .ToList();
+
+        return View(moments);
+    }
+
+    [Authorize]
+    [HttpGet]
+    public IActionResult RegisteredMoments()
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = identityId == null
+            ? null
+            : userRepository.GetByIdentityId(identityId);
+
+        if (user == null)
+            return Forbid();
+
+        var moments = momentRepository.GetAll()
+            .Where(moment => moment.Players.Any(player => player.Id == user.Id))
+            .OrderBy(moment => moment.DateTime)
+            .ToList();
+
+        return View(moments);
+    }
+
 }

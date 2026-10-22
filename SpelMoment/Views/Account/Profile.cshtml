@@ -1,0 +1,169 @@
+
+@model SpelMoment.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Mijn profiel";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        
+        <div class="col-lg-9">
+
+            <h1 class="mb-2">Mijn profiel</h1>
+            <p class="text-muted mb-4">
+                Beheer je persoonlijke gegevens en dieetwensen.
+            </p>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Profile" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            Persoonlijke gegevens
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">
+                                    Voornaam
+                                </label>
+                                <input asp-for="FirstName" class="form-control"/>
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">
+                                    Achternaam
+                                </label>
+                                <input asp-for="LastName" class="form-control"/>
+                                <span asp-validation-for="LastName"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Birthday" class="form-label">
+                                Geboortedatum
+                            </label>
+                            <input asp-for="Birthday"
+                                   type="date"
+                                   class="form-control"/>
+                            <span asp-validation-for="Birthday"
+                                  class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Adresgegevens</h5>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Street" class="form-label">
+                                    Straat
+                                </label>
+                                <input asp-for="Street" class="form-control"/>
+                                <span asp-validation-for="Street"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="HouseNumber" class="form-label">
+                                    Huisnummer
+                                </label>
+                                <input asp-for="HouseNumber" class="form-control"/>
+                                <span asp-validation-for="HouseNumber"
+                                      class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="City" class="form-label">
+                                Woonplaats
+                            </label>
+                            <input asp-for="City" class="form-control"/>
+                            <span asp-validation-for="City"
+                                  class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">Mijn dieetwensen</h5>
+
+                        <p class="text-muted">
+                            We gebruiken deze voorkeuren om je te
+                            waarschuwen wanneer een spelmoment
+                            niet alle gewenste opties aanbiedt.
+                        </p>
+
+                        <div class="form-check mb-2">
+                            <input asp-for="HasLactoseIntolerance"
+                                   class="form-check-input"/>
+                            <label asp-for="HasLactoseIntolerance"
+                                   class="form-check-label">
+                                Ik heb een lactose-intolerantie
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input asp-for="HasNutAllergy"
+                                   class="form-check-input"/>
+                            <label asp-for="HasNutAllergy"
+                                   class="form-check-label">
+                                Ik heb een notenallergie
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input asp-for="IsVegetarian"
+                                   class="form-check-input"/>
+                            <label asp-for="IsVegetarian"
+                                   class="form-check-label">
+                                Ik eet vegetarisch
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input asp-for="WantsNonAlcoholicDrinks"
+                                   class="form-check-input"/>
+                            <label asp-for="WantsNonAlcoholicDrinks"
+                                   class="form-check-label">
+                                Ik wil alcoholvrije dranken
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit"
+                            class="btn text-white"
+                            style="background-color: #1e6a41;">
+                        Wijzigingen opslaan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

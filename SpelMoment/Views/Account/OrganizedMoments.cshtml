@@ -1,0 +1,55 @@
+@model IEnumerable<SpelMoment.Domain.Model.Moment>
+
+@{
+    ViewData["Title"] = "Mijn georganiseerde spelmomenten";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="mb-1">Mijn georganiseerde spelmomenten</h1>
+            <p class="text-muted mb-0">
+                Bekijk de spelavonden die je organiseert.
+            </p>
+        </div>
+
+        <a asp-controller="Moments"
+           asp-action="Create"
+           class="btn text-white"
+           style="background-color: #1e6a41;">
+            + Spelmoment aanmaken
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Je hebt nog geen spelmomenten georganiseerd.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var moment in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <partial name="_MomentCard" model="moment" />
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="text-decoration-none">
+            ← Terug naar home
+        </a>
+    </div>
+</div>
+
+@section Head {
+    <link rel="stylesheet"
+          href="~/css/moment-card.css"
+          asp-append-version="true" />
+}
