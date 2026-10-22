@@ -1,10 +1,45 @@
+
+body {
+    background-color: #f5f8f5;
+}
+
 .login-container {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 30px 15px;
 }
+
 .login-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 440px;
+    border: 1px solid #e5e9e6;
+    border-radius: 12px;
+}
+
+.brand-title {
+    color: #1e6a41;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.brand-title:hover {
+    color: #14502f;
+}
+
+.auth-link {
+    color: #1e6a41;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    color: #14502f;
+    text-decoration: underline;
+}
+
+.form-control:focus {
+    border-color: #1e6a41;
+    box-shadow: 0 0 0 0.2rem rgba(30, 106, 65, 0.15);
 }

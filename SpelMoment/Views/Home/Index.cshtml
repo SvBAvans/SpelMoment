@@ -1,27 +1,246 @@
-﻿@{
+﻿
+@model HomeViewModel
+
+@{
     ViewData["Title"] = "Home";
+    var isLoggedIn = User.Identity?.IsAuthenticated == true;
 }
 
-<div class="container-fluid p-0" id="hero">
-    <div class="position-relative">
-        <div id="hero-image"></div>
+@section Head {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+}
 
-        <div class="position-absolute top-50 start-0 translate-middle-y text-white p-4">
-            <h1 class="display-4">Speel, Leer en Maak Vrienden</h1>
-            <p class="lead">Ontdek Nederlands via Bordspel Avonden!</p>
-            @if (User.Identity == null || !User.Identity.IsAuthenticated) 
-            {
-                <a asp-action="Register" asp-controller="Account" class="lead btn btn-primary" role="button">Meld je aan!</a>
-            }
-        </div>
-    </div>
-    
+<section class="home-hero">
+    <div class="container">
+        <div class="hero-content">
+            <span class="hero-label">
+                Samen spelen, samen leren
+            </span>
 
-    <div class="container my-5">
-        <div class="card w-75 mx-auto">
-            <div class="card-body">
-                <p class="card-text">Doe mee aan onze gezellige bordspelavonden en verbeter spelenderwijs je Nederlands! Deze avonden zijn speciaal voor mensen die nieuw zijn in Nederland en op een informele manier de taal willen leren, terwijl ze tegelijkertijd nieuwe vrienden maken. Of je nu beginner bent of al wat Nederlands spreekt, iedereen is welkom. Samen spelen we populaire bordspellen, leren we nieuwe woorden en zinnen, en delen we leuke momenten met mensen uit verschillende culturen. Kom langs, leer, lach en ontdek hoe leuk het is om Nederlands te oefenen in een ontspannen sfeer!</p>
+            <h1> Leer Nederlands.<span>Maak nieuwe vrienden.</span></h1>
+
+            <p>
+                Ontmoet nieuwe mensen, speel gezellige
+                bordspellen en oefen spelenderwijs je
+                Nederlands. Iedereen is welkom!
+            </p>
+
+            <div class="d-flex flex-wrap gap-3">
+                <a href="#moments" class="btn btn-primary btn-lg">Bekijk spelavonden</a>
+
+                @if (!isLoggedIn)
+                {
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg">
+                        Maak een account
+                    </a>
+                }
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="intro-section py-5">
+    <div class="container text-center">
+        <span class="section-label">Welkom</span>
+        <h2 class="section-title">Samen is leren leuker!</h2>
+
+        <p class="intro-text mx-auto">
+            Nederlands leren hoeft niet moeilijk of saai
+            te zijn. Tijdens onze bordspelavonden ontmoet
+            je nieuwe mensen, oefen je de taal en beleef
+            je een gezellige avond.
+        </p>
+
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <h3>Speel samen</h3>
+                    <p>
+                        Ontdek leuke bordspellen en
+                        beleef gezellige momenten.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Leer Nederlands</h3>
+                    <p>
+                        Oefen nieuwe woorden en zinnen
+                        in een ontspannen omgeving.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Maak vrienden</h3>
+                    <p>
+                        Leer mensen kennen en bouw
+                        nieuwe vriendschappen op.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="moments" class="moments-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">Doe gezellig mee</span>
+
+            <h2 class="section-title">Aankomende spelavonden</h2>
+
+            <p class="text-muted">
+                Kies een spelavond die bij jou past
+                en ontdek hoe leuk samen spelen is.
+            </p>
+        </div>
+
+        @if (Model.SuggestedMoments?.Any() == true)
+        {
+            <div class="row g-4">
+                @foreach (var moment in Model.SuggestedMoments)
+                {
+                    var playerCount =
+                        moment.Players?.Count() ?? 0;
+
+                    <div class="col-lg-4 col-md-6">
+                        <article class="moment-card h-100">
+                            <div class="moment-card-header">
+                                <div class="date-badge">
+                                    <strong>
+                                        @moment.DateTime.ToString("dd")
+                                    </strong>
+                                    <span>
+                                        @moment.DateTime.ToString("MMM")
+                                    </span>
+                                </div>
+
+                                <span class="time-badge">
+                                    @moment.DateTime.ToString("HH:mm")
+                                </span>
+                            </div>
+
+                            <div class="moment-card-body">
+                                <h3 class="moment-title">Gezellige bordspelavond</h3>
+
+                                <div class="moment-info">
+                                    <p>
+                                        <span>📍</span>
+                                        @moment.Address?.ToDisplayString()
+                                    </p>
+
+                                    <p>
+                                        <span>👤</span>
+                                        @moment.Organiser?.ToDisplayString()
+                                    </p>
+
+                                    <p>
+                                        <span>👥</span>
+                                        @playerCount aangemeld
+                                    </p>
+                                </div>
+
+                                <hr />
+
+                                <h4 class="diet-title">
+                                    Eten en drinken
+                                </h4>
+
+                                <div class="diet-tags">
+                                    @if (moment.IsVegetarianFriendly)
+                                    {
+                                        <span class="diet-tag">
+                                            🌱 Vegetarisch
+                                        </span>
+                                    }
+
+                                    @if (moment.IsLactoseIntoleranceFriendly)
+                                    {
+                                        <span class="diet-tag">
+                                            🥛 Lactosevrij
+                                        </span>
+                                    }
+
+                                    @if (moment.IsNutAllergyFriendly)
+                                    {
+                                        <span class="diet-tag">
+                                            🥜 Notenvrij
+                                        </span>
+                                    }
+
+                                    @if (moment.IsNonAlcoholicFriendly)
+                                    {
+                                        <span class="diet-tag">
+                                            🥤 Alcoholvrij
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="moment-card-footer">
+                                @if (isLoggedIn)
+                                {
+                                    <a asp-controller="Moments" asp-action="Details" asp-route-id="@moment.Id" class="btn btn-primary w-100">
+                                        Bekijk spelavond
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100">
+                                        Log in om mee te doen
+                                    </a>
+                                }
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state text-center">
+                <div class="mb-3" style="font-size: 3rem;">
+                    🎲
+                </div>
+
+                <h3>Nog geen spelavonden gepland</h3>
+
+                <p class="text-muted">
+                    Er zijn momenteel geen spelavonden
+                    beschikbaar. Kom later terug!
+                </p>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="join-section py-5">
+    <div class="container text-center">
+        <h2>Klaar om mee te spelen?</h2>
+
+        <p>
+            Een gezellige avond, nieuwe vrienden
+            en Nederlands oefenen.
+            Wat wil je nog meer?
+        </p>
+
+        @if (!isLoggedIn)
+        {
+            <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
+                Meld je gratis aan
+            </a>
+        }
+        else
+        {
+            <a href="#moments" class="btn btn-light btn-lg">
+                Ontdek de spelavonden
+            </a>
+        }
+    </div>
+</section>

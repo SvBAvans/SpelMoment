@@ -98,12 +98,11 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<bool>("IsVegetarianFriendly")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("OrganiserId")
+                    b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("OrganiserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

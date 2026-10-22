@@ -1,0 +1,102 @@
+
+/* Registratieformulier */
+
+.register-form-container {
+    max-width: 620px;
+    padding-top: 15px;
+    padding-bottom: 25px;
+}
+
+.form-section {
+    margin-bottom: 35px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e0e8e2;
+}
+
+.form-section h3 {
+    font-size: 1.15rem;
+    font-weight: 750;
+    color: #24382d;
+    margin-bottom: 8px;
+}
+
+.form-section-description {
+    color: #64746a;
+    font-size: 0.9rem;
+    margin-bottom: 22px;
+    line-height: 1.6;
+}
+
+.register-form-container .form-text {
+    color: #718076;
+    font-size: 0.8rem;
+    margin-top: 7px;
+}
+
+/* Dieetwensen */
+
+.diet-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.diet-options .form-check {
+    margin: 0;
+    padding: 15px 15px 15px 42px;
+    border: 1px solid #dce5df;
+    border-radius: 10px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+}
+
+.diet-options .form-check:hover {
+    border-color: #1e6a41;
+}
+
+.diet-options .form-check-input {
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.diet-options .form-check-input:checked {
+    background-color: #1e6a41;
+    border-color: #1e6a41;
+}
+
+.diet-options .form-check-label {
+    font-size: 0.9rem;
+    color: #24382d;
+    cursor: pointer;
+}
+
+.diet-options .form-check:has(
+    .form-check-input:checked
+) {
+    background-color: #e8f3ec;
+    border-color: #1e6a41;
+}
+
+.diet-options .form-check:has(
+    .form-check-input:disabled
+) {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+
+@media (max-width: 575px) {
+    .register-form-container {
+        padding-top: 0;
+    }
+
+    .diet-options {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        margin-bottom: 28px;
+        padding-bottom: 25px;
+    }
+}

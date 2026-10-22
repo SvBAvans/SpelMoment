@@ -1,45 +1,86 @@
+
 @model LoginViewModel
+
 @{
-    Layout = null;  
+    Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Login Page</title>
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
-    <link href="~/css/login.css" rel="stylesheet" asp-append-version="true"/>
-</head>
-<body>
-<div class="container login-container">
-    <div class="card login-card shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title text-center mb-4">Login</h3>
-            <form asp-action="Login" method="post">
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label">Email</label>
-                    <input type="text" class="form-control" asp-for="Email" placeholder="Enter Email" required>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label">Password</label>
-                    <input type="password" class="form-control" asp-for="Password" placeholder="Enter password" required>
-                </div>
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <input type="hidden" asp-for="ReturnUrl" />
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-                <hr/>
-                <a asp-action="Register" asp-controller="Account">Nog geen Account?</a>
-            </form>
-        </div>
-    </div>
-</div>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
 
-<script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
-@* <script type="text/javascript"> *@
-@*    TODO: Form Validation  *@
-@* </script> *@
+    <title>Inloggen - SpelMoment</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+    <main class="container login-container">
+        <div class="card login-card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="text-center mb-4">
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="text-decoration-none brand-title">
+                        🎲 SpelMoment
+                    </a>
+
+                    <h1 class="h3 fw-bold mt-3 mb-2">
+                        Welkom terug!
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        Log in om jouw spelavonden te bekijken.
+                    </p>
+                </div>
+
+                <form asp-controller="Account" asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">E-mailadres</label>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="naam@voorbeeld.nl" autocomplete="email" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label">Wachtwoord</label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Voer je wachtwoord in" autocomplete="current-password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2">Inloggen</button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="text-muted small text-decoration-none">
+                        ← Terug naar home
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 </body>
 </html>

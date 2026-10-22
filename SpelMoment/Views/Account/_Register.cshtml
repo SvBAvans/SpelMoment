@@ -1,0 +1,435 @@
+﻿
+@model RegisterViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Registreren";
+}
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Registreren - SpelMoment</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/_login.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/register.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+<main class="auth-page">
+    <div class="auth-wrapper">
+
+        <div class="auth-info">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-logo">
+                🎲 SpelMoment
+            </a>
+
+            <div class="auth-info-content">
+                <span class="auth-label">
+                    Word onderdeel van de groep
+                </span>
+
+                <h1>
+                    Nieuwe vrienden
+                    <span>beginnen hier.</span>
+                </h1>
+
+                <p>
+                    Maak gratis een account aan en
+                    ontdek hoe leuk het is om samen
+                    bordspellen te spelen en Nederlands
+                    te oefenen.
+                </p>
+
+                <div class="auth-benefits">
+                    <p>🎲 Gezellige bordspelavonden</p>
+                    <p>🌍 Mensen uit verschillende culturen</p>
+                    <p>💬 Samen Nederlands oefenen</p>
+                </div>
+            </div>
+
+            <div class="auth-info-footer">
+                © @DateTime.Now.Year SpelMoment
+            </div>
+        </div>
+
+        <div class="auth-form-section">
+            <div class="auth-form-container register-form-container">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="back-link">
+                    ← Terug naar home
+                </a>
+
+                <div class="auth-heading">
+                    <h2>Maak je account aan</h2>
+                    <p>
+                        Vul je gegevens in en ontdek
+                        de spelavonden bij jou in de buurt.
+                    </p>
+                </div>
+
+                <form asp-controller="Account"
+                      asp-action="Register"
+                      method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"
+                         role="alert">
+                    </div>
+
+                    <input type="hidden"
+                           asp-for="ReturnUrl" />
+
+                    <div class="form-section">
+                        <h3>Persoonlijke gegevens</h3>
+                        <p class="form-section-description">
+                            Vertel ons iets over jezelf.
+                        </p>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName"
+                                       class="form-label">
+                                    Voornaam
+                                </label>
+
+                                <input asp-for="FirstName"
+                                       class="form-control"
+                                       autocomplete="given-name"
+                                       required />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="LastName"
+                                       class="form-label">
+                                    Achternaam
+                                </label>
+
+                                <input asp-for="LastName"
+                                       class="form-control"
+                                       autocomplete="family-name"
+                                       required />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Email"
+                                       class="form-label">
+                                    E-mailadres
+                                </label>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="naam@voorbeeld.nl"
+                                       autocomplete="email"
+                                       required />
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Birthday"
+                                       class="form-label">
+                                    Geboortedatum
+                                </label>
+
+                                <input asp-for="Birthday"
+                                       type="date"
+                                       class="form-control"
+                                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       required />
+
+                                <span asp-validation-for="Birthday"
+                                      class="text-danger small"></span>
+
+                                <div class="form-text">
+                                    Je moet minimaal 16 jaar zijn.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Gender"
+                                       class="form-label">
+                                    Geslacht
+                                </label>
+
+                                <select asp-for="Gender"
+                                        class="form-select"
+                                        required>
+                                    <option value="">
+                                        Maak een keuze
+                                    </option>
+                                    <option value="@SpelMoment.Domain.Model.User.GenderEnum.Male">
+                                        Man
+                                    </option>
+                                    <option value="@SpelMoment.Domain.Model.User.GenderEnum.Female">
+                                        Vrouw
+                                    </option>
+                                    <option value="@SpelMoment.Domain.Model.User.GenderEnum.Other">
+                                        Anders
+                                    </option>
+                                </select>
+
+                                <span asp-validation-for="Gender"
+                                      class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Beveiliging</h3>
+                        <p class="form-section-description">
+                            Kies een veilig wachtwoord voor je account.
+                        </p>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="Password"
+                                       class="form-label">
+                                    Wachtwoord
+                                </label>
+
+                                <input asp-for="Password"
+                                       type="password"
+                                       class="form-control"
+                                       autocomplete="new-password"
+                                       required />
+
+                                <span asp-validation-for="Password"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="PasswordConfirmation"
+                                       class="form-label">
+                                    Bevestig wachtwoord
+                                </label>
+
+                                <input asp-for="PasswordConfirmation"
+                                       type="password"
+                                       class="form-control"
+                                       autocomplete="new-password"
+                                       required />
+
+                                <span asp-validation-for="PasswordConfirmation"
+                                      class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Dieetwensen</h3>
+                        <p class="form-section-description">
+                            Zo kunnen organisatoren rekening
+                            houden met jouw wensen.
+                        </p>
+
+                        <div class="diet-options">
+                            <div class="form-check">
+                                <input asp-for="HasLactoseIntolerance"
+                                       class="form-check-input" />
+                                <label asp-for="HasLactoseIntolerance"
+                                       class="form-check-label">
+                                    Ik ben lactose-intolerant
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input asp-for="HasNutAllergy"
+                                       class="form-check-input" />
+                                <label asp-for="HasNutAllergy"
+                                       class="form-check-label">
+                                    Ik heb een notenallergie
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input asp-for="IsVegetarian"
+                                       class="form-check-input" />
+                                <label asp-for="IsVegetarian"
+                                       class="form-check-label">
+                                    Ik ben vegetariër
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input asp-for="DrinksAlcohol"
+                                       class="form-check-input" />
+                                <label asp-for="DrinksAlcohol"
+                                       class="form-check-label">
+                                    Ik drink alcohol
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Adresgegevens</h3>
+                        <p class="form-section-description">
+                            Vul je woonadres in.
+                        </p>
+
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label asp-for="Address.Street"
+                                       class="form-label">
+                                    Straat
+                                </label>
+
+                                <input asp-for="Address.Street"
+                                       class="form-control"
+                                       autocomplete="address-line1"
+                                       required />
+
+                                <span asp-validation-for="Address.Street"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Address.HouseNumber"
+                                       class="form-label">
+                                    Huisnummer
+                                </label>
+
+                                <input asp-for="Address.HouseNumber"
+                                       class="form-control"
+                                       required />
+
+                                <span asp-validation-for="Address.HouseNumber"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Address.City"
+                                       class="form-label">
+                                    Stad
+                                </label>
+
+                                <input asp-for="Address.City"
+                                       class="form-control"
+                                       autocomplete="address-level2"
+                                       required />
+
+                                <span asp-validation-for="Address.City"
+                                      class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary auth-submit w-100">
+                        Account aanmaken
+                    </button>
+
+                    <div class="auth-divider">
+                        <span>Heb je al een account?</span>
+                    </div>
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       asp-route-returnUrl="@Model.ReturnUrl"
+                       class="btn btn-outline-success w-100 auth-secondary">
+                        Inloggen
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const birthdayInput = document.getElementById("Birthday");
+        const alcoholCheckbox = document.getElementById("DrinksAlcohol");
+
+        if (!birthdayInput || !alcoholCheckbox) {
+            return;
+        }
+
+        let previousAlcoholChoice = alcoholCheckbox.checked;
+
+        function updateAlcoholAvailability() {
+            if (!birthdayInput.value) {
+                alcoholCheckbox.checked = false;
+                alcoholCheckbox.disabled = true;
+                return;
+            }
+
+            const parts = birthdayInput.value.split("-").map(Number);
+            const birthYear = parts[0];
+            const birthMonth = parts[1];
+            const birthDay = parts[2];
+
+            const today = new Date();
+
+            let age = today.getFullYear() - birthYear;
+
+            const birthdayHasPassed =
+                today.getMonth() + 1 > birthMonth ||
+                (today.getMonth() + 1 === birthMonth &&
+                 today.getDate() >= birthDay);
+
+            if (!birthdayHasPassed) {
+                age--;
+            }
+
+            if (age < 18) {
+                if (!alcoholCheckbox.disabled) {
+                    previousAlcoholChoice = alcoholCheckbox.checked;
+                }
+
+                alcoholCheckbox.checked = false;
+                alcoholCheckbox.disabled = true;
+            } else {
+                if (alcoholCheckbox.disabled) {
+                    alcoholCheckbox.checked = previousAlcoholChoice;
+                }
+
+                alcoholCheckbox.disabled = false;
+            }
+        }
+
+        birthdayInput.addEventListener(
+            "change",
+            updateAlcoholAvailability
+        );
+
+        alcoholCheckbox.addEventListener("change", function () {
+            previousAlcoholChoice = alcoholCheckbox.checked;
+        });
+
+        updateAlcoholAvailability();
+    });
+</script>
+</body>
+</html>

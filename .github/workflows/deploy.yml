@@ -22,6 +22,12 @@ jobs:
           name: spelmoment
           path: ./ui
           
+      - name: Download API
+        uses: actions/download-artifact@v4
+        with:
+          name: spelmoment-api
+          path: ./api
+          
       - name: Download migrations
         uses: actions/download-artifact@v4
         with:
@@ -34,6 +40,12 @@ jobs:
           ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{secrets.AZURE_SQL_MIGRATOR}};Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD  }};Trusted_Connection=False;Encrypt=True;"
           chmod +x ./migrations/migrations-auth.exe
           ./migrations/migrations-auth.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{secrets.AZURE_SQL_MIGRATOR}};Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD  }};Trusted_Connection=False;Encrypt=True;"
+      
+#      TODO: For future me: I hope this works
+      - name: Install frontend dependencies
+        run: |
+          dotnet tool install --global Microsoft.Web.LibraryManager.Cli
+          libman restore
     
       - uses: azure/login@v1
         with:
@@ -45,8 +57,19 @@ jobs:
           app-name: '${{ secrets.AZURE_APP_SERVICE_NAME }}'
           package: './ui'
           
+      - name: Deploy Azure Web App api
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: '${{ secrets.AZURE_APP_API_SERVICE_NAME }}'
+          package: './api'
+      
       - uses: azure/appservice-settings@v1
         with:
           app-name: '${{secrets.AZURE_APP_SERVICE_NAME}}'
+          app-settings-json: '[{ "name": "DB_CONNECTION_STRING", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
+          
+      - uses: azure/appservice-settings@v1
+        with:
+          app-name: '${{secrets.AZURE_APP_API_SERVICE_NAME}}'
           app-settings-json: '[{ "name": "DB_CONNECTION_STRING", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
           

@@ -19,9 +19,10 @@ public class HeaderViewComponent : ViewComponent
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            var idUser = await userManager.FindByNameAsync(User.Identity.Name);
+            var idUser = await userManager.FindByNameAsync(User.Identity.Name!);
             if (idUser != null) {
                 var user = userRepository.GetByIdentityId(idUser.Id);
+                if (user == null) return View();
                 ViewBag.FirstName = user.FirstName;
             }
         }

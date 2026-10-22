@@ -5,7 +5,12 @@ namespace SpelMoment.Domain.Model;
 [Owned]
 public class Address
 {
-    public string Street { get; set; }
-    public string City { get; set; }
-    public string HouseNumber { get; set; }
+    public string Street { get; set; } = null!;
+    public string City { get; set; } = null!;
+    public string HouseNumber { get; set; } = null!;
+
+    public string ToDisplayString()
+    {
+        return $"{Street} {HouseNumber}, {City}";
+    }
 }

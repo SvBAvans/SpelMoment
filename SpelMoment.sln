@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment.Domain", "SpelMoment.Domain\SpelMoment.Domain.csproj", "{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpelMoment.WebAPI", "SpelMoment.WebAPI\SpelMoment.WebAPI.csproj", "{12EB7E1F-4948-43CA-AC95-21B781993701}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3362A1A-CE18-41C4-9203-DAFAC478B3AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12EB7E1F-4948-43CA-AC95-21B781993701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12EB7E1F-4948-43CA-AC95-21B781993701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12EB7E1F-4948-43CA-AC95-21B781993701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12EB7E1F-4948-43CA-AC95-21B781993701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
