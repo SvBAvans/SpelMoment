@@ -1,0 +1,64 @@
+.moment-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.moment-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.moment-card-body {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.moment-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.moment-info p {
+    margin-bottom: 0.4rem;
+    color: #555;
+}
+
+.moment-info p span {
+    margin-right: 0.4rem;
+}
+
+.moment-card-body hr {
+    margin: 0.9rem 0;
+    border-color: #e5e7eb;
+}
+
+.diet-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.diet-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.diet-tag {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    background: #eef7f0;
+    color: #1e6a41;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.moment-card-footer {
+    padding: 0 1.25rem 1.25rem;
+}

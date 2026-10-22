@@ -8,6 +8,7 @@
 
 @section Head {
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/moment-card.css" asp-append-version="true" />
 }
 
 <section class="home-hero">
@@ -101,103 +102,14 @@
             </p>
         </div>
 
+        
         @if (Model.SuggestedMoments?.Any() == true)
         {
             <div class="row g-4">
                 @foreach (var moment in Model.SuggestedMoments)
                 {
-                    var playerCount =
-                        moment.Players?.Count() ?? 0;
-
                     <div class="col-lg-4 col-md-6">
-                        <article class="moment-card h-100">
-                            <div class="moment-card-header">
-                                <div class="date-badge">
-                                    <strong>
-                                        @moment.DateTime.ToString("dd")
-                                    </strong>
-                                    <span>
-                                        @moment.DateTime.ToString("MMM")
-                                    </span>
-                                </div>
-
-                                <span class="time-badge">
-                                    @moment.DateTime.ToString("HH:mm")
-                                </span>
-                            </div>
-
-                            <div class="moment-card-body">
-                                <h3 class="moment-title">Gezellige bordspelavond</h3>
-
-                                <div class="moment-info">
-                                    <p>
-                                        <span>📍</span>
-                                        @moment.Address?.ToDisplayString()
-                                    </p>
-
-                                    <p>
-                                        <span>👤</span>
-                                        @moment.Organiser?.ToDisplayString()
-                                    </p>
-
-                                    <p>
-                                        <span>👥</span>
-                                        @playerCount aangemeld
-                                    </p>
-                                </div>
-
-                                <hr />
-
-                                <h4 class="diet-title">
-                                    Eten en drinken
-                                </h4>
-
-                                <div class="diet-tags">
-                                    @if (moment.IsVegetarianFriendly)
-                                    {
-                                        <span class="diet-tag">
-                                            🌱 Vegetarisch
-                                        </span>
-                                    }
-
-                                    @if (moment.IsLactoseIntoleranceFriendly)
-                                    {
-                                        <span class="diet-tag">
-                                            🥛 Lactosevrij
-                                        </span>
-                                    }
-
-                                    @if (moment.IsNutAllergyFriendly)
-                                    {
-                                        <span class="diet-tag">
-                                            🥜 Notenvrij
-                                        </span>
-                                    }
-
-                                    @if (moment.IsNonAlcoholicFriendly)
-                                    {
-                                        <span class="diet-tag">
-                                            🥤 Alcoholvrij
-                                        </span>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="moment-card-footer">
-                                @if (isLoggedIn)
-                                {
-                                    <a asp-controller="Moments" asp-action="Details" asp-route-id="@moment.Id" class="btn btn-primary w-100">
-                                        Bekijk spelavond
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary w-100">
-                                        Log in om mee te doen
-                                    </a>
-                                }
-                            </div>
-                        </article>
+                        <partial name="_MomentCard" model="moment" />
                     </div>
                 }
             </div>
@@ -205,18 +117,14 @@
         else
         {
             <div class="empty-state text-center">
-                <div class="mb-3" style="font-size: 3rem;">
-                    🎲
-                </div>
-
+                <div class="mb-3" style="font-size: 3rem;">🎲</div>
                 <h3>Nog geen spelavonden gepland</h3>
-
                 <p class="text-muted">
-                    Er zijn momenteel geen spelavonden
-                    beschikbaar. Kom later terug!
+                    Er zijn momenteel geen spelavonden beschikbaar. Kom later terug!
                 </p>
             </div>
         }
+
     </div>
 </section>
 

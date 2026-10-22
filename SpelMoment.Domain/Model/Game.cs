@@ -12,6 +12,8 @@ public class Game
     public bool Is18Plus { get; set; }
     public string ImageUrl { get; set; } = null!;
     public GameType Type { get; set; }
+    public int MomentId { get; set; }
+    public Moment Moment { get; set; } = null!;
 
     public enum GameType
     {

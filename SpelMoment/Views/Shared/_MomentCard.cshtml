@@ -1,0 +1,85 @@
+
+@model SpelMoment.Domain.Model.Moment
+
+@{
+    var playerCount = Model.Players?.Count ?? 0;
+    var availablePlaces = Math.Max(0, Model.MaxPlayers - playerCount);
+    var is18Plus = Model.Is18Plus || Model.Games.Any(game => game.Is18Plus);
+}
+
+<article class="moment-card h-100">
+    <div class="moment-card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+            <div>
+                <h3 class="moment-title mb-1 text-capitalize">@Model.DateTime.ToString("dddd d MMMM")</h3>
+                <span class="text-muted small">🕒 @Model.DateTime.ToString("HH:mm") uur</span>
+            </div>
+
+            @if (is18Plus)
+            {
+                <span class="badge bg-danger">18+</span>
+            }
+        </div>
+
+        <div class="moment-info">
+            <p><span>📍</span> @Model.Address?.ToDisplayString()</p>
+            <p><span>👤</span> @(Model.Organiser?.ToDisplayString() ?? "Onbekend")</p>
+            <p><span>👥</span> @playerCount / @Model.MaxPlayers deelnemers</p>
+        </div>
+
+        <div class="mt-2">
+            @if (availablePlaces == 0)
+            {
+                <span class="badge bg-secondary">Vol</span>
+            }
+            else
+            {
+                <span class="badge bg-success">@availablePlaces plaatsen beschikbaar</span>
+            }
+        </div>
+
+        <hr />
+
+        <h4 class="diet-title">Bordspellen</h4>
+        <div class="diet-tags">
+            @foreach (var game in Model.Games)
+            {
+                <span class="diet-tag">🎲 @game.Name</span>
+            }
+        </div>
+
+        @if (Model.IsVegetarianFriendly || Model.IsLactoseIntoleranceFriendly ||
+             Model.IsNutAllergyFriendly || Model.IsNonAlcoholicFriendly)
+        {
+            <h4 class="diet-title mt-3">Eten en drinken</h4>
+
+            <div class="diet-tags">
+                @if (Model.IsVegetarianFriendly)
+                {
+                    <span class="diet-tag">🌱 Vegetarisch</span>
+                }
+
+                @if (Model.IsLactoseIntoleranceFriendly)
+                {
+                    <span class="diet-tag">🥛 Lactosevrij</span>
+                }
+
+                @if (Model.IsNutAllergyFriendly)
+                {
+                    <span class="diet-tag">🥜 Notenvrij</span>
+                }
+
+                @if (Model.IsNonAlcoholicFriendly)
+                {
+                    <span class="diet-tag">🥤 Alcoholvrij</span>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="moment-card-footer">
+        <a asp-controller="Moments" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary w-100">
+            Bekijk spelavond
+        </a>
+    </div>
+</article>

@@ -1,0 +1,143 @@
+@model SpelMoment.Models.CreateMomentViewModel
+@using SpelMoment.Domain.Model
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Gegevens van het spelmoment</h5>
+
+        <div class="mb-3">
+            <label asp-for="DateTime" class="form-label">Datum en tijd</label>
+            <input asp-for="DateTime" type="datetime-local" class="form-control"/>
+            <span asp-validation-for="DateTime" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label asp-for="Street" class="form-label">Straat</label>
+                <input asp-for="Street" class="form-control"/>
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="HouseNumber" class="form-label">Huisnummer</label>
+                <input asp-for="HouseNumber" class="form-control"/>
+                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label asp-for="City" class="form-label">Plaats</label>
+                <input asp-for="City" class="form-control"/>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label asp-for="MaxPlayers" class="form-label">Maximaal aantal spelers</label>
+                <input asp-for="MaxPlayers" type="number" min="1" class="form-control"/>
+                <span asp-validation-for="MaxPlayers" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-check">
+            <input asp-for="Is18Plus" class="form-check-input"/>
+            <label asp-for="Is18Plus" class="form-check-label">Dit spelmoment is 18+</label>
+        </div>
+        <small class="text-muted">Als een toegevoegd spel 18+ is, wordt het spelmoment automatisch 18+.</small>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Eten en drinken</h5>
+        <p class="text-muted">Geef aan welke opties beschikbaar zijn tijdens het spelmoment.</p>
+
+        <div class="form-check mb-2">
+            <input asp-for="IsLactoseIntoleranceFriendly" class="form-check-input"/>
+            <label asp-for="IsLactoseIntoleranceFriendly" class="form-check-label">Lactosevrij beschikbaar</label>
+        </div>
+
+        <div class="form-check mb-2">
+            <input asp-for="IsNutAllergyFriendly" class="form-check-input"/>
+            <label asp-for="IsNutAllergyFriendly" class="form-check-label">Notenvrij beschikbaar</label>
+        </div>
+
+        <div class="form-check mb-2">
+            <input asp-for="IsVegetarianFriendly" class="form-check-input"/>
+            <label asp-for="IsVegetarianFriendly" class="form-check-label">Vegetarisch beschikbaar</label>
+        </div>
+
+        <div class="form-check">
+            <input asp-for="IsNonAlcoholicFriendly" class="form-check-input"/>
+            <label asp-for="IsNonAlcoholicFriendly" class="form-check-label">Alcoholvrije dranken beschikbaar</label>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-2">Bordspellen</h5>
+        <p class="text-muted">Voeg minimaal één spel toe dat tijdens het spelmoment gespeeld wordt.</p>
+
+        <div id="games-container">
+            @for (var i = 0; i < Model.Games.Count; i++)
+            {
+                <div class="game-item border rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="game-title mb-0">Spel @(i + 1)</h6>
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-game">Verwijderen</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Games[i].Name" class="form-label">Naam</label>
+                        <input asp-for="Games[i].Name" class="form-control"/>
+                        <span asp-validation-for="Games[i].Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Games[i].Description" class="form-label">Beschrijving</label>
+                        <textarea asp-for="Games[i].Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Games[i].Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Games[i].Genre" class="form-label">Genre</label>
+                            <select asp-for="Games[i].Genre" asp-items="Html.GetEnumSelectList<Game.GameGenre>()"
+                                    class="form-select">
+                                <option value="">Selecteer een genre</option>
+                            </select>
+                            <span asp-validation-for="Games[i].Genre" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Games[i].Type" class="form-label">Soort spel</label>
+                            <select asp-for="Games[i].Type" asp-items="Html.GetEnumSelectList<Game.GameType>()"
+                                    class="form-select">
+                                <option value="">Selecteer een soort</option>
+                            </select>
+                            <span asp-validation-for="Games[i].Type" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Games[i].ImageUrl" class="form-label">Afbeeldings-URL</label>
+                        <input asp-for="Games[i].ImageUrl" type="url" class="form-control" placeholder="https://..."/>
+                        <span asp-validation-for="Games[i].ImageUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check">
+                        <input asp-for="Games[i].Is18Plus" class="form-check-input"/>
+                        <label asp-for="Games[i].Is18Plus" class="form-check-label">Dit spel is 18+</label>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button type="button" id="add-game" class="btn btn-outline-success">
+            + Bordspel toevoegen
+        </button>
+    </div>
+</div>

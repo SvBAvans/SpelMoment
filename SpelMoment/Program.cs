@@ -7,7 +7,8 @@ using SpelMoment.Infrastructure.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dbConnectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is empty.");
 
 builder.Services.AddDbContext<SpelMomentDbContext>(options =>
 {

@@ -27,5 +27,11 @@ public class SpelMomentDbContext : DbContext
         modelBuilder.Entity<Moment>()
             .HasMany(e => e.Players)
             .WithMany(e => e.RegisteredMoments);
+        
+        modelBuilder.Entity<Game>()
+            .HasOne(game => game.Moment)
+            .WithMany(moment => moment.Games)
+            .HasForeignKey(game => game.MomentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

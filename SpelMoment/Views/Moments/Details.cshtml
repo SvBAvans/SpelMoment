@@ -1,0 +1,209 @@
+
+@using System.Security.Claims
+@model SpelMoment.Domain.Model.Moment
+
+@{
+    ViewData["Title"] = "Spelavond bekijken";
+    var playerCount = Model.Players.Count;
+    var availablePlaces = Math.Max(0, Model.MaxPlayers - playerCount);
+    var is18Plus = Model.Is18Plus || Model.Games.Any(game => game.Is18Plus);
+    var isLoggedIn = User.Identity?.IsAuthenticated == true;
+    var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isRegistered = Model.Players.Any(player => player.IdentityId == identityId);
+    var isOrganiser = Model.Organiser?.IdentityId == identityId && identityId != null;
+}
+
+<div class="container py-4">
+    <a asp-controller="Moments" asp-action="Index" class="text-decoration-none d-inline-block mb-3">
+        ← Terug naar spelmomenten
+    </a>
+
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="mb-1">@Model.DateTime.ToString("dddd d MMMM yyyy")</h1>
+            <p class="text-muted mb-0">Een gezellige avond vol bordspellen en Nederlands oefenen.</p>
+        </div>
+
+        @if (is18Plus)
+        {
+            <span class="badge bg-danger">18+</span>
+        }
+    </div>
+    
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success">@successMessage</div>
+    }
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="mb-3">Over deze spelavond</h4>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <strong>📅 Datum en tijd</strong>
+                            <p class="mb-0">@Model.DateTime.ToString("dddd d MMMM yyyy") om @Model.DateTime.ToString("HH:mm") uur</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>📍 Locatie</strong>
+                            <p class="mb-0">@Model.Address.ToDisplayString()</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>👤 Organisator</strong>
+                            <p class="mb-0">@(Model.Organiser?.ToDisplayString() ?? "Onbekend")</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>👥 Deelnemers</strong>
+                            <p class="mb-0">@playerCount / @Model.MaxPlayers aangemeld</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mb-3">Bordspellen</h4>
+
+            @if (!Model.Games.Any())
+            {
+                <div class="alert alert-light border">Er zijn nog geen bordspellen toegevoegd.</div>
+            }
+            else
+            {
+                <div class="row g-3 mb-4">
+                    @foreach (var game in Model.Games)
+                    {
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                @if (!string.IsNullOrWhiteSpace(game.ImageUrl))
+                                {
+                                    <img src="@game.ImageUrl" alt="@game.Name" class="card-img-top" style="height: 180px; object-fit: cover;" />
+                                }
+
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                        <h5 class="card-title mb-0">@game.Name</h5>
+
+                                        @if (game.Is18Plus)
+                                        {
+                                            <span class="badge bg-danger">18+</span>
+                                        }
+                                    </div>
+
+                                    <p class="text-muted">@game.Description</p>
+
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <span class="badge bg-light text-dark border">@game.Genre</span>
+                                        <span class="badge bg-light text-dark border">@game.Type</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    
+                    @if (!isOrganiser)
+                    {
+                        <h4 class="mb-3">Meedoen?</h4>
+                    }
+
+                    @if (isOrganiser)
+                    {
+                        @if (playerCount == 0)
+                        {
+                            <div class="d-grid gap-2">
+                                <a asp-controller="Moments" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                                    Bewerken
+                                </a>
+
+                                <form asp-controller="Moments" asp-action="Delete" asp-route-id="@Model.Id" method="post"
+                                      onsubmit="return confirm('Weet je zeker dat je dit spelmoment wilt verwijderen?');">
+                                    <button type="submit" class="btn btn-outline-danger w-100">Verwijderen</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">
+                                Je kunt dit spelmoment niet meer bewerken of verwijderen, omdat er al deelnemers zijn aangemeld.
+                            </p>
+                        }
+                    }
+                    else if (isRegistered)
+                    {
+                        <form asp-controller="Moments" asp-action="Leave" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-outline-danger w-100">Afmelden</button>
+                        </form>
+                    }
+                    else if (availablePlaces == 0)
+                    {
+                        <button class="btn btn-secondary w-100" disabled>Spelavond is vol</button>
+                    }
+                    else if (isLoggedIn)
+                    {
+                        <form asp-controller="Moments" asp-action="Join" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-primary w-100">Aanmelden</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login"
+                           asp-route-returnUrl="@($"{Context.Request.Path}{Context.Request.QueryString}")"
+                           class="btn btn-primary w-100">
+                            Log in om mee te doen
+                        </a>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="mb-3">Eten en drinken</h4>
+                    <p class="text-muted small">Tijdens deze spelavond zijn de volgende opties beschikbaar:</p>
+
+                    <div class="d-flex flex-wrap gap-2">
+                        @if (Model.IsVegetarianFriendly)
+                        {
+                            <span class="badge bg-light text-dark border">🌱 Vegetarisch</span>
+                        }
+
+                        @if (Model.IsLactoseIntoleranceFriendly)
+                        {
+                            <span class="badge bg-light text-dark border">🥛 Lactosevrij</span>
+                        }
+
+                        @if (Model.IsNutAllergyFriendly)
+                        {
+                            <span class="badge bg-light text-dark border">🥜 Notenvrij</span>
+                        }
+
+                        @if (Model.IsNonAlcoholicFriendly)
+                        {
+                            <span class="badge bg-light text-dark border">🥤 Alcoholvrij</span>
+                        }
+
+                        @if (!Model.IsVegetarianFriendly && !Model.IsLactoseIntoleranceFriendly &&
+                             !Model.IsNutAllergyFriendly && !Model.IsNonAlcoholicFriendly)
+                        {
+                            <span class="text-muted">Geen specifieke opties opgegeven.</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

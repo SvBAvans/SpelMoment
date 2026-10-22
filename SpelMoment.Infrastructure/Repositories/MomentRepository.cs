@@ -30,13 +30,21 @@ public class MomentRepository : IMomentRepository
 
     public IEnumerable<Moment> GetAll()
     {
-        return dbContext.Moments.Include(moment => moment.Organiser).Include(moment => moment.Players).ToList();
+        return dbContext.Moments
+            .Include(moment => moment.Organiser)
+            .Include(moment => moment.Players)
+            .Include(moment => moment.Games)
+            .OrderBy(moment => moment.DateTime)
+            .ToList();
     }
 
     public Moment? GetById(int id)
     {
-        return dbContext.Moments.Include(moment => moment.Organiser)
-            .Include(moment => moment.Players).FirstOrDefault(moment => moment.Id == id);
+        return dbContext.Moments
+            .Include(moment => moment.Organiser)
+            .Include(moment => moment.Players)
+            .Include(moment => moment.Games)
+            .FirstOrDefault(moment => moment.Id == id);
     }
 
     public void Update(Moment moment)

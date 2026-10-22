@@ -58,7 +58,7 @@ namespace SpelMoment.Infrastructure.Migrations
                     b.Property<bool>("Is18Plus")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MomentId")
+                    b.Property<int>("MomentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -85,6 +85,9 @@ namespace SpelMoment.Infrastructure.Migrations
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Is18Plus")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsLactoseIntoleranceFriendly")
                         .HasColumnType("bit");
@@ -177,9 +180,13 @@ namespace SpelMoment.Infrastructure.Migrations
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Game", b =>
                 {
-                    b.HasOne("SpelMoment.Domain.Model.Moment", null)
+                    b.HasOne("SpelMoment.Domain.Model.Moment", "Moment")
                         .WithMany("Games")
-                        .HasForeignKey("MomentId");
+                        .HasForeignKey("MomentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Moment");
                 });
 
             modelBuilder.Entity("SpelMoment.Domain.Model.Moment", b =>
