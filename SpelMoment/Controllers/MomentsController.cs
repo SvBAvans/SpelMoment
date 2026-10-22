@@ -240,6 +240,7 @@ public class MomentsController : Controller
 
             Games = moment.Games.Select(game => new CreateGameViewModel
             {
+                Id = game.Id,
                 Name = game.Name,
                 Description = game.Description,
                 Genre = game.Genre,
@@ -297,19 +298,51 @@ public class MomentsController : Controller
         moment.IsNutAllergyFriendly = model.IsNutAllergyFriendly;
         moment.IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly;
 
-        moment.Games.Clear();
+        
+        var submittedGameIds = model.Games
+            .Where(game => game.Id.HasValue)
+            .Select(game => game.Id!.Value)
+            .ToHashSet();
+        
+        var removedGames = moment.Games
+            .Where(game => !submittedGameIds.Contains(game.Id))
+            .ToList();
 
+        foreach (var game in removedGames)
+        {
+            moment.Games.Remove(game);
+        }
+        
         foreach (var gameModel in model.Games)
-            moment.Games.Add(new Game
+        {
+            Game? game = null;
+
+            if (gameModel.Id.HasValue)
             {
-                Id = Guid.NewGuid(),
-                Name = gameModel.Name,
-                Description = gameModel.Description,
-                Genre = gameModel.Genre!.Value,
-                Type = gameModel.Type!.Value,
-                Is18Plus = gameModel.Is18Plus,
-                ImageUrl = gameModel.ImageUrl
-            });
+                game = moment.Games.FirstOrDefault(g => g.Id == gameModel.Id.Value);
+
+                if (game == null)
+                    return BadRequest("Een opgegeven spel hoort niet bij dit spelmoment.");
+            }
+            else
+            {
+                game = new Game
+                {
+                    Id = Guid.NewGuid(),
+                    MomentId = moment.Id
+                };
+
+                moment.Games.Add(game);
+            }
+
+            game.Name = gameModel.Name;
+            game.Description = gameModel.Description;
+            game.Genre = gameModel.Genre!.Value;
+            game.Type = gameModel.Type!.Value;
+            game.Is18Plus = gameModel.Is18Plus;
+            game.ImageUrl = gameModel.ImageUrl;
+        }
+
 
         moment.Is18Plus = model.Is18Plus || moment.Games.Any(game => game.Is18Plus);
 

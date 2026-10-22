@@ -90,6 +90,8 @@
                         <button type="button" class="btn btn-outline-danger btn-sm remove-game">Verwijderen</button>
                     </div>
 
+                    <input asp-for="Games[i].Id" type="hidden" />
+                    
                     <div class="mb-3">
                         <label asp-for="Games[i].Name" class="form-label">Naam</label>
                         <input asp-for="Games[i].Name" class="form-control"/>

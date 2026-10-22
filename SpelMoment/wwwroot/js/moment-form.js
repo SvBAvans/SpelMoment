@@ -60,6 +60,14 @@ addGameButton.addEventListener("click", () => {
         span.classList.add("field-validation-valid");
     });
 
+    newGame.querySelectorAll("input, textarea, select").forEach(field => {
+        if (field.type === "checkbox") {
+            field.checked = false;
+        } else {
+            field.value = "";
+        }
+    });
+    
     gamesContainer.appendChild(newGame);
 
     updateGameIndexes();
@@ -82,3 +90,4 @@ gamesContainer.addEventListener("click", event => {
     updateGameIndexes();
     refreshValidation();
 });
+

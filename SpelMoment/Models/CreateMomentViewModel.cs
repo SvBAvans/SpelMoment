@@ -32,6 +32,8 @@ public class CreateMomentViewModel
 
 public class CreateGameViewModel
 {
+    public Guid? Id { get; set; }
+    
     [Required(ErrorMessage = "Vul een spelnaam in.")]
     public string Name { get; set; } = string.Empty;
 
