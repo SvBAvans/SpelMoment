@@ -55,56 +55,61 @@ public class MomentsController : ControllerBase
     }
 
     
-    [HttpPost("{id:int}/register")]
-    [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<Results<Created<SuccessResponse>, EmptyHttpResult, ProblemHttpResult, NotFound, UnauthorizedHttpResult>> RegisterMoment(int id)
+    [HttpPost("{id:int}/registrations")]
+    public IActionResult RegisterMoment(int id)
     {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
-                     ?? User.FindFirst("sub")?.Value;
+        var identityId = User.FindFirst(
+            System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-        if (userId == null)
-        {
-            return TypedResults.Unauthorized();
-        }
+        if (identityId == null)
+            return Unauthorized();
 
-        var user = _userRepository.GetByIdentityId(userId);
+        var user = _userRepository.GetByIdentityId(identityId);
 
         if (user == null)
-        {
-            return TypedResults.Unauthorized();
-        }
-        
+            return Unauthorized();
+
         var moment = _momentRepository.GetById(id);
+
         if (moment == null)
-        {
-            return TypedResults.NotFound();
-        }
-        
-        if (moment.Players.Any(p => p.Id == user.Id))
-            return TypedResults.Problem(
-                detail: "Already registered.",
-                statusCode: StatusCodes.Status400BadRequest
-            );
-            
+            return NotFound();
 
-        if (moment.Players.Count() >= moment.MaxPlayers)
-        {           
-            return TypedResults.Problem(
-                detail: "Too many players.",
-                statusCode: StatusCodes.Status400BadRequest
-            );
-        }
-        
+        if (moment.Organiser?.Id == user.Id)
+            return Conflict("Je kunt je niet aanmelden voor je eigen spelavond.");
 
-        var players = moment.Players.ToList();
-        players.Add(user);
+        if (moment.Players.Any(player => player.Id == user.Id))
+            return Conflict("Je bent al aangemeld.");
 
-        moment.Players = players;
-        
+        if (moment.Players.Count >= moment.MaxPlayers)
+            return Conflict("Deze spelavond is vol.");
+
+        var age = moment.DateTime.Year - user.Birthday.Year;
+
+        if (user.Birthday > DateOnly.FromDateTime(moment.DateTime).AddYears(-age))
+            age--;
+
+        if (moment.Is18Plus && age < 18)
+            return BadRequest("Je moet minimaal 18 jaar zijn voor deze spelavond.");
+
+        var alreadyRegisteredThatDay = _momentRepository.GetAll()
+            .Any(m =>
+                m.Id != moment.Id &&
+                m.DateTime.Date == moment.DateTime.Date &&
+                m.Players.Any(player => player.Id == user.Id));
+
+        if (alreadyRegisteredThatDay)
+            return Conflict("Je bent op deze dag al aangemeld voor een spelavond.");
+
+        moment.Players.Add(user);
+
         _momentRepository.Update(moment);
-        
-        return TypedResults.Created($"/moments/{moment.Id}/register", new SuccessResponse() {Success = true, Message = "Registered for SpelMoment"});
+
+        return Created(
+            $"/api/moments/{moment.Id}/registrations",
+            new SuccessResponse
+            {
+                Success = true,
+                Message = "Je bent aangemeld voor de spelavond."
+            });
     }
 }

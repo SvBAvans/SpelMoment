@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SpelMoment.Domain.Interfaces;
 using SpelMoment.Infrastructure.Data;
 using SpelMoment.Infrastructure.Repositories;
+using SpelMoment.WebAPI.GraphQL;
 using SpelMoment.WebAPI.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var dbConnectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                         ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is empty.");
 
 builder.Services.AddDbContext<SpelMomentDbContext>(options =>
 {
@@ -64,6 +66,10 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();
 
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
+
 var app = builder.Build();
 // app.UseHttpLogging();
 
@@ -76,8 +82,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
-// app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
+
+app.MapGraphQL("/graphql");
+
 app.MapControllers();
 
 app.Run();
