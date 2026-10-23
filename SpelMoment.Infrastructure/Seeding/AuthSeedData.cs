@@ -4,25 +4,71 @@ using SpelMoment.Domain.Model;
 
 namespace SpelMoment.Infrastructure.Seeding;
 
-public class AuthSeedData (ILogger<AuthSeedData> logger, RoleManager<IdentityRole> roleManager)
+public class AuthSeedData(
+    ILogger<AuthSeedData> logger,
+    RoleManager<IdentityRole> roleManager,
+    UserManager<IdentityUser> userManager)
 {
-    private readonly ILogger<AuthSeedData> logger = logger;
-    private readonly RoleManager<IdentityRole> roleManager = roleManager;
-    
-    public async Task seedDatabase()
+    public async Task SeedDatabase()
     {
-        if (!roleManager.Roles.Any())
+        if (roleManager.Roles.Any() || userManager.Users.Any())
         {
-            foreach (var role in Enum.GetValues<UserRole>())
+            logger.LogInformation("Identity database bevat al gegevens. Seeding overgeslagen.");
+            return;
+        }
+
+        foreach (var role in Enum.GetValues<UserRole>())
+        {
+            var result = await roleManager.CreateAsync(
+                new IdentityRole(role.ToString()));
+
+            if (!result.Succeeded)
             {
-                await roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                throw new InvalidOperationException(
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-            
-            logger.LogInformation("Roles seeded");
         }
-        else
+
+        var firstNames = new[]
         {
-            logger.LogError("Roles already present");
+            "Thomas",
+            "Emma",
+            "Lucas",
+            "Sophie",
+            "Noah"
+        };
+
+        foreach (var firstName in firstNames)
+        {
+            var email = $"{firstName}@pjiesco.com";
+
+            var identityUser = new IdentityUser
+            {
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(identityUser, "test1234");
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    $"Gebruiker {email} kon niet worden aangemaakt: " +
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+
+            var roleResult = await userManager.AddToRoleAsync(
+                identityUser,
+                UserRole.User.ToString());
+
+            if (!roleResult.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+            }
         }
+
+        logger.LogInformation("Identity database succesvol gevuld.");
     }
 }

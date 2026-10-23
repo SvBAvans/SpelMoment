@@ -49,6 +49,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<AuthSeedData>();
+builder.Services.AddScoped<SpelMomentSeedData>();
 builder.Services.AddScoped<IMomentRepository, MomentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
@@ -60,9 +61,15 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var seedData = scope.ServiceProvider.GetRequiredService<AuthSeedData>();
+    var authSeeder = scope.ServiceProvider
+        .GetRequiredService<AuthSeedData>();
 
-    await seedData.seedDatabase();
+    await authSeeder.SeedDatabase();
+
+    var dataSeeder = scope.ServiceProvider
+        .GetRequiredService<SpelMomentSeedData>();
+
+    await dataSeeder.SeedDatabase();
 }
 
 

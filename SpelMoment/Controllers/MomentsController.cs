@@ -26,7 +26,7 @@ public class MomentsController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        var moments = momentRepository.GetAll();
+        var moments = momentRepository.GetAll().OrderBy(moment => moment.DateTime).Where(moment => moment.DateTime >  DateTime.Now);
         return View(moments);
     }
 
