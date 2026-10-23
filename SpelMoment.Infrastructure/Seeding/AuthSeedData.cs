@@ -35,7 +35,8 @@ public class AuthSeedData(
             "Emma",
             "Lucas",
             "Sophie",
-            "Noah"
+            "Noah",
+            "Demo"
         };
 
         foreach (var firstName in firstNames)

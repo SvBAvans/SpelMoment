@@ -30,7 +30,8 @@ public class SpelMomentSeedData(
             "Emma",
             "Lucas",
             "Sophie",
-            "Noah"
+            "Noah",
+            "Demo"
         };
 
         var identities = new Dictionary<string, IdentityUser>();
@@ -147,8 +148,31 @@ public class SpelMomentSeedData(
                 City = "Tilburg"
             }
         };
+        
+        var demo = new User
+        {
+            IdentityId = identities["Demo"].Id,
+            FirstName = "Demo",
+            LastName = "Speler",
+            Email = "Demo@pjiesco.com",
+            Role = UserRole.User,
+            Birthday = new DateOnly(2008, 6, 15),
+            Gender = User.GenderEnum.Other,
 
-        dbContext.Users.AddRange(thomas, emma, lucas, sophie, noah);
+            HasLactoseIntolerance = true,
+            HasNutAllergy = true,
+            IsVegetarian = true,
+            DrinksAlcohol = false,
+
+            Address = new Address
+            {
+                Street = "DemoStraat",
+                HouseNumber = "1",
+                City = "Tilburg"
+            }
+        };
+
+        dbContext.Users.AddRange(thomas, emma, lucas, sophie, noah, demo);
 
         // Spelavonden
 
@@ -175,17 +199,27 @@ public class SpelMomentSeedData(
         {
             Organiser = emma,
             DateTime = DateTime.Today.AddDays(14).AddHours(20),
+
             Address = new Address
             {
                 Street = "Heuvelstraat",
                 HouseNumber = "25",
                 City = "Tilburg"
             },
+
             MaxPlayers = 4,
             Is18Plus = true,
-            IsVegetarianFriendly = true,
-            IsNonAlcoholicFriendly = true,
-            Players = new List<User> { thomas, noah }
+
+            IsVegetarianFriendly = false,
+            IsLactoseIntoleranceFriendly = false,
+            IsNutAllergyFriendly = false,
+            IsNonAlcoholicFriendly = false,
+
+            Players = new List<User>
+            {
+                thomas,
+                noah
+            }
         };
 
         var moment3 = new Moment
@@ -210,18 +244,28 @@ public class SpelMomentSeedData(
         {
             Organiser = sophie,
             DateTime = DateTime.Today.AddDays(-14).AddHours(19),
+
             Address = new Address
             {
                 Street = "Korte Heuvel",
                 HouseNumber = "8",
                 City = "Tilburg"
             },
+
             MaxPlayers = 6,
             Is18Plus = false,
+
             IsVegetarianFriendly = true,
             IsNutAllergyFriendly = true,
             IsNonAlcoholicFriendly = true,
-            Players = new List<User> { thomas, emma, noah }
+
+            Players = new List<User>
+            {
+                thomas,
+                emma,
+                noah,
+                demo
+            }
         };
 
         var moment5 = new Moment
