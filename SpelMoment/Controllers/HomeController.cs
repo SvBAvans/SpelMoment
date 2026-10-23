@@ -21,9 +21,7 @@ public class HomeController : Controller
     {
         IEnumerable<Moment>? suggestedMoments = null;
         
-        if (User.Identity != null && User.Identity.IsAuthenticated) {
-            suggestedMoments = _momentRepository.GetAll().OrderBy(moment => moment.DateTime).Where(moment => moment.DateTime >  DateTime.Now);
-        }
+        suggestedMoments = _momentRepository.GetAll().OrderBy(moment => moment.DateTime).Where(moment => moment.DateTime >  DateTime.Now);
 
         return View(new HomeViewModel {SuggestedMoments = suggestedMoments});
     }

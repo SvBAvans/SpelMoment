@@ -43,6 +43,20 @@ public class MomentsController : Controller
 
         ViewBag.Reviews = reviews;
         
+        var organiserReviews = reviewRepository
+            .GetByOrganiserId(moment.Organiser!.Id)
+            .ToList();
+
+        ViewBag.OrganiserAverageRating = organiserReviews.Any()
+            ? organiserReviews.Average(review => review.Rating)
+            : 0;
+
+        ViewBag.OrganiserReviewCount = organiserReviews.Count;
+        
+        ViewBag.OrganisedMomentCount = momentRepository.GetAll()
+            .Count(m => m.Organiser?.Id == moment.Organiser?.Id
+                        && m.Organiser != null);
+        
         var warnings = new List<string>();
 
         if (User.Identity?.IsAuthenticated == true)
@@ -66,20 +80,6 @@ public class MomentsController : Controller
                 if (!user.DrinksAlcohol && !moment.IsNonAlcoholicFriendly)
                     warnings.Add("Er zijn geen alcoholvrije dranken beschikbaar.");
             }
-            
-            var organiserReviews = reviewRepository
-                .GetByOrganiserId(moment.Organiser!.Id)
-                .ToList();
-
-            ViewBag.OrganiserAverageRating = organiserReviews.Any()
-                ? organiserReviews.Average(review => review.Rating)
-                : 0;
-
-            ViewBag.OrganiserReviewCount = organiserReviews.Count;
-        
-            ViewBag.OrganisedMomentCount = momentRepository.GetAll()
-                .Count(m => m.Organiser?.Id == moment.Organiser?.Id
-                            && m.Organiser != null);
             
             ViewBag.CanReview =
                 user != null &&
