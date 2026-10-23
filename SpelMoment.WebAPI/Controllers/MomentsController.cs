@@ -26,9 +26,9 @@ public class MomentsController : ControllerBase
         _userRepository = userRepository;
     }
     
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType(typeof(MomentsResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Results<Ok<MomentsResponse>, EmptyHttpResult, ProblemHttpResult>> Moments()
     {
 
@@ -37,10 +37,10 @@ public class MomentsController : ControllerBase
         return TypedResults.Ok(new MomentsResponse {Moments = _mapper.Map<IEnumerable<MomentDto>>(moments)});
     }
     
+    [AllowAnonymous]
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(MomentResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Results<Ok<MomentResponse>, EmptyHttpResult, ProblemHttpResult, NotFound>> GetMomentById(int id)
     {
 
@@ -56,6 +56,11 @@ public class MomentsController : ControllerBase
 
     
     [HttpPost("{id:int}/registrations")]
+    [ProducesResponseType(typeof(SuccessResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult RegisterMoment(int id)
     {
         var identityId = User.FindFirst(

@@ -20,6 +20,8 @@ public class AccountController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<Results<EmptyHttpResult, UnauthorizedHttpResult>> Login(
         [FromBody] LoginRequest request)
     {
