@@ -1,75 +1,64 @@
-﻿name: deploy.yml
+name: CI/CD - ASP.NET Production
+
 on:
   push:
     branches:
       - master
 
-  workflow_dispatch: 
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+env:
+  DOTNET_VERSION: '8.0.x'
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-  
-  deploy:
-    needs: build
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
-    environment: production
+
     steps:
-      - name: Download UI
-        uses: actions/download-artifact@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          name: spelmoment
-          path: ./ui
-          
-      - name: Download API
-        uses: actions/download-artifact@v4
-        with:
-          name: spelmoment-api
-          path: ./api
-          
-      - name: Download migrations
-        uses: actions/download-artifact@v4
-        with:
-          name: spelmoment-migrations
-          path: ./migrations
-          
-      - name: Execute EF migrations
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build application
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test --configuration Release --no-build
+
+  deploy:
+    name: Deploy to Coolify
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Trigger Coolify deployment
+        env:
+          COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
-          chmod +x ./migrations/migrations.exe
-          ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{secrets.AZURE_SQL_MIGRATOR}};Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD  }};Trusted_Connection=False;Encrypt=True;"
-          chmod +x ./migrations/migrations-auth.exe
-          ./migrations/migrations-auth.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{secrets.AZURE_SQL_MIGRATOR}};Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD  }};Trusted_Connection=False;Encrypt=True;"
-      
-#      TODO: For future me: I hope this works
-      - name: Install frontend dependencies
-        run: |
-          dotnet tool install --global Microsoft.Web.LibraryManager.Cli
-          libman restore
-    
-      - uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          
-      - name: Deploy Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: '${{ secrets.AZURE_APP_SERVICE_NAME }}'
-          package: './ui'
-          
-      - name: Deploy Azure Web App api
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: '${{ secrets.AZURE_APP_API_SERVICE_NAME }}'
-          package: './api'
-      
-      - uses: azure/appservice-settings@v1
-        with:
-          app-name: '${{secrets.AZURE_APP_SERVICE_NAME}}'
-          app-settings-json: '[{ "name": "DB_CONNECTION_STRING", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
-          
-      - uses: azure/appservice-settings@v1
-        with:
-          app-name: '${{secrets.AZURE_APP_API_SERVICE_NAME}}'
-          app-settings-json: '[{ "name": "DB_CONNECTION_STRING", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=${{ secrets.AZURE_SQL_APP_USER }};Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]'
-          
+          curl --fail-with-body \
+            --retry 3 \
+            --request POST \
+            --url "$COOLIFY_WEBHOOK" \
+            --header "Authorization: Bearer $COOLIFY_TOKEN"
