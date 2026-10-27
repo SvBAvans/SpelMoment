@@ -334,6 +334,28 @@ public class MomentsController : Controller
         if (model.Games == null || model.Games.Count == 0)
             ModelState.AddModelError(nameof(model.Games), "Voeg minimaal één bordspel toe.");
 
+        Console.WriteLine("=== ONTVANGEN SPELLEN ===");
+
+        for (var i = 0; i < model.Games.Count; i++)
+        {
+            var game = model.Games[i];
+
+            Console.WriteLine(
+                $"Games[{i}]: Id={game.Id}, Name={game.Name}, " +
+                $"Genre={game.Genre}, Type={game.Type}, ImageUrl={game.ImageUrl}"
+            );
+        }
+
+        Console.WriteLine("=== VALIDATIEFOUTEN ===");
+
+        foreach (var entry in ModelState)
+        {
+            foreach (var error in entry.Value.Errors)
+            {
+                Console.WriteLine($"{entry.Key}: {error.ErrorMessage}");
+            }
+        }
+        
         if (!ModelState.IsValid)
         {
             model.Games ??= new List<CreateGameViewModel>();

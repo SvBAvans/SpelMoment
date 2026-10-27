@@ -302,7 +302,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Family,
                 Type = Game.GameType.Board,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://d36a5wyl9ttzok.cloudfront.net/680x680/b2c/source_images/Catan---Big-Box-2023_L.png",
                 Moment = moment1
             },
             new Game
@@ -313,7 +313,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Family,
                 Type = Game.GameType.Board,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://m.media-amazon.com/images/I/91IZNnP7GSL.jpg",
                 Moment = moment1
             },
             new Game
@@ -324,7 +324,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Party,
                 Type = Game.GameType.Card,
                 Is18Plus = true,
-                ImageUrl = "",
+                ImageUrl = "https://m.media-amazon.com/images/I/6145Fx5tHBL.jpg",
                 Moment = moment2
             },
             new Game
@@ -335,7 +335,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Party,
                 Type = Game.GameType.Card,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://m.media-amazon.com/images/I/719Tx5F4mfL._AC_UF894,1000_QL80_.jpg",
                 Moment = moment2
             },
             new Game
@@ -346,7 +346,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Family,
                 Type = Game.GameType.Board,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEUHGhT4WuRwLagb7uKIfeGz3aS4rjeHZmWupJ8fYe6I_aybiAYY1RpoY&s=10",
                 Moment = moment3
             },
             new Game
@@ -357,7 +357,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Party,
                 Type = Game.GameType.Board,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://d36a5wyl9ttzok.cloudfront.net/680x680/b2c/source_images/30-Seconds.png",
                 Moment = moment3
             },
             new Game
@@ -368,7 +368,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Family,
                 Type = Game.GameType.Card,
                 Is18Plus = false,
-                ImageUrl = "",
+                ImageUrl = "https://media.s-bol.com/x3K8v9YEq2j9/321kYNO/539x840.jpg",
                 Moment = moment4
             },
             new Game
@@ -379,7 +379,7 @@ public class SpelMomentSeedData(
                 Genre = Game.GameGenre.Party,
                 Type = Game.GameType.Card,
                 Is18Plus = true,
-                ImageUrl = "",
+                ImageUrl = "https://m.media-amazon.com/images/I/81uI0GG0rlL._AC_UF894,1000_QL80_.jpg",
                 Moment = moment5
             }
         );

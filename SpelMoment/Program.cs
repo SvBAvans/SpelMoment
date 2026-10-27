@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SpelMoment.Domain.Interfaces;
 using SpelMoment.Infrastructure.Data;
@@ -55,7 +56,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewOptions(options =>
+    {
+        options.HtmlHelperOptions.CheckBoxHiddenInputRenderMode =
+            CheckBoxHiddenInputRenderMode.Inline;
+    });
 
 var app = builder.Build();
 

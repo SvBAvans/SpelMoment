@@ -49,7 +49,31 @@ public class MomentRepository : IMomentRepository
 
     public void Update(Moment moment)
     {
-        dbContext.Update(moment);
+        var existingGames = dbContext.Games
+            .Where(game => game.Moment.Id == moment.Id)
+            .Select(game => game.Id)
+            .ToHashSet();
+        
+        var currentGameIds = moment.Games
+            .Select(game => game.Id)
+            .ToHashSet();
+
+        foreach (var gameId in existingGames.Except(currentGameIds))
+        {
+            var game = dbContext.Games.Find(gameId);
+
+            if (game != null)
+                dbContext.Games.Remove(game);
+        }
+        
+        foreach (var game in moment.Games)
+        {
+            if (!existingGames.Contains(game.Id))
+            {
+                dbContext.Entry(game).State = EntityState.Added;
+            }
+        }
+
         dbContext.SaveChanges();
     }
 }
